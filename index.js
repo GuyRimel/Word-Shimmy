@@ -1,20 +1,18 @@
 const $ = el => document.querySelector(el);
-let pointA, pointAText, pointB, pointBText;
-// on drag, the variables pointA(i.e., the element)
-// and pointAText(i.e., the element's innerText) are stored
+let pointA, pointB, pointAParent, pointBParent;
+// on drag, the dragging element is stored as pointA
 const drag = (e) => {
   pointA = e.target;
-  pointAText = e.target.innerText;
+  pointAParent = pointA.parentElement;
 }
 const allowDrop = (e) => e.preventDefault();
-// on drop, pointB and pointBText are stored
-// then, each element's innertext is swapped with the stored text
+// on drop, the element being dropped onto is stored as pointB
+// then, each element is swapped
 const drop = (e) => {
   pointB = e.target;
-  pointBText = e.target.innerText;
-
-  pointA.innerText = pointBText;
-  pointB.innerText = pointAText;
+  pointBParent = pointB.parentElement;
+  pointAParent.appendChild(pointB);
+  pointBParent.appendChild(pointA);
   evaluate();
 }
 let getRandomLetter = () => {
@@ -44,13 +42,13 @@ let getRandomLetter = () => {
     WW
     XX
     YYYYY
-    ZZZ`.replace(/\s+/g, ''); // this is a regEx that removes any whitespace
+    ZZ`.replace(/\s+/g, ''); // this is a regEx that removes any whitespace
   let index;
   index = Math.floor(Math.random() * letterBag.length);
   return letterBag.charAt(index);
 }
 
-let getRandomGridIndex = () => Math.round(Math.random() * Math.pow(rowSize, 2));
+let getRandomGridIndex = () => Math.floor(Math.random() * 25);
 const rowSize = 5;
 let goalWord = 'BUILD';
 let firstPosition = getRandomGridIndex();
@@ -61,88 +59,79 @@ let fifthPosition = getRandomGridIndex();
 
 // this painfully ensures that each position is unique -_-
 if(
-  secondPosition === firstPosition ||
-  isNaN(secondPosition)
+  secondPosition === firstPosition
 ) secondPosition = getRandomGridIndex();
 if(
   thirdPosition === firstPosition ||
-  thirdPosition === secondPosition ||
-  isNaN(thirdPosition)
+  thirdPosition === secondPosition
 ) thirdPosition = getRandomGridIndex();
 if(
   fourthPosition === firstPosition ||
   fourthPosition === secondPosition ||
-  fourthPosition === thirdPosition ||
-  isNaN(fourthPosition)
+  fourthPosition === thirdPosition
 ) fourthPosition = getRandomGridIndex;
 if(
   fifthPosition === firstPosition ||
   fifthPosition === secondPosition ||
   fifthPosition === thirdPosition ||
-  fifthPosition === fourthPosition ||
-  isNaN(fifthPosition)
+  fifthPosition === fourthPosition
 ) fifthPosition = getRandomGridIndex;
 
 console.log(firstPosition, secondPosition, thirdPosition, fourthPosition, fifthPosition);
 
 for(i = 0; i < Math.pow(rowSize, 2); i++) {
+  let elContainer = document.createElement('div');
   let el = document.createElement('button');
   let letter = getRandomLetter();
 
-  if(i === firstPosition) letter = goalWord.charAt(0);
-  if(letter === goalWord.charAt(0)) el.dataset.piece = 0;
-
-  if(i === secondPosition) letter = goalWord.charAt(1);
-  if(letter === goalWord.charAt(1)) el.dataset.piece = 1;
-
-  if(i === thirdPosition) letter = goalWord.charAt(2);
-  if(letter === goalWord.charAt(2)) el.dataset.piece = 2;
-
-  if(i === fourthPosition) letter = goalWord.charAt(3);
-  if(letter === goalWord.charAt(3)) el.dataset.piece = 3;
-
-  if(i === fifthPosition) letter = goalWord.charAt(4);
-  if(letter === goalWord.charAt(4)) el.dataset.piece = 4;
+  if(i === firstPosition) {
+    letter = goalWord.charAt(0);
+    el.dataset.piece = 1;
+  } else if(i === secondPosition) {
+    letter = goalWord.charAt(1);
+    el.dataset.piece = 2;
+  } else if(i === thirdPosition) {
+    letter = goalWord.charAt(2);
+    el.dataset.piece = 3;
+  } else if(i === fourthPosition) {
+    letter = goalWord.charAt(3);
+    el.dataset.piece = 4;
+  } else if(i === fifthPosition) {
+    letter = goalWord.charAt(4);
+    el.dataset.piece = 5;
+  } else {
+    el.dataset.piece = 0;
+  }
 
   el.innerText = letter;
-  el.classList.add('grid-item', 'btn', 'cell');
+  el.classList.add('btn', 'cell');
   el.setAttribute('draggable', true);
   el.setAttribute('ondragstart', 'drag(event)');
   el.setAttribute('ondragover', 'allowDrop(event)');
   el.setAttribute('ondrop', 'drop(event)');
   // the gridx position of an element is the remainder of i / 5
-  el.dataset.gridx = i % rowSize;
-  el.dataset.gridy = Math.floor(i / rowSize);
-  $('.grid').appendChild(el);
+  elContainer.dataset.gridx = i % rowSize;
+  elContainer.dataset.gridy = Math.floor(i / rowSize);
+  elContainer.classList.add('grid-item')
+  elContainer.appendChild(el);
+  $('.grid').appendChild(elContainer);
 }
 
 let evaluate = () => {
   document.querySelectorAll('.cell').forEach((cell) => {
-    if(!cell.dataset.piece) return;
+    cell.classList.remove('green', 'yellow');
     let gridx = parseInt(cell.dataset.gridx);
     let gridy = parseInt(cell.dataset.gridy);
-    let cellAbove, cellToRight, cellBelow, cellToLeft;
-    gridy === 0
-      ? cellAbove = null
-      : cellAbove = $(`[data-gridx="${gridx}"][data-gridy="${gridy-1}"]`);
-      
-    gridx === rowSize-1
-      ? cellToRight = null
-      : cellToRight = $(`[data-gridx="${gridx+1}"][data-gridy="${gridy}"]`);
-
-    gridy === rowSize-1
+    let piece = parseInt(cell.dataset.piece); // if piece === 0, it's treated as "false"
+    let cellToRight, cellBelow;
+    (gridy === (rowSize - 1))
       ? cellBelow = null
       : cellBelow = $(`[data-gridx="${gridx}"][data-gridy="${gridy+1}"]`);
 
-    gridx === rowSize-1
-      ? cellToLeft = null
-      : cellToLeft = $(`[data-gridx="${gridx-1}"][data-gridy="${gridy}"]`);
-
-    if(cellAbove && cellAbove.dataset.piece) {
-      if(parseInt(cellAbove.dataset.piece) === parseInt(cell.dataset.piece) -1) {
+      if(cellBelow === null) return
+      else if(!piece || !parseInt(cellBelow.dataset.piece)) return
+      else {
         cell.classList.add('green');
-        cellToRight.classList.add('green');
       }
-    }
   })
 }

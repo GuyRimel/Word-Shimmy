@@ -27,15 +27,16 @@ h1 {
   justify-content: center;
   height: 18vw;
   border: 1px inset #555;
+}
+
+.cell {
   background: #eaeaea;
   color: #234;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   font-size: 3em;
   font-weight: bold;
-}
-
-.btn {
   width: 100%;
+  height: 100%;
   box-shadow: 2px 2px #222a
 }
 
