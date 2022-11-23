@@ -4,6 +4,7 @@ let pointA, pointB, pointAParent, pointBParent;
 const drag = (e) => {
   pointA = e.target;
   pointAParent = pointA.parentElement;
+  pointA.classList.add('dragging');
 }
 const allowDrop = (e) => e.preventDefault();
 // on drop, the element being dropped onto is stored as pointB
@@ -13,6 +14,8 @@ const drop = (e) => {
   pointBParent = pointB.parentElement;
   pointAParent.appendChild(pointB);
   pointBParent.appendChild(pointA);
+  pointA.classList.remove('dragging', 'dragover');
+  pointB.classList.remove('dragging', 'dragover');
   evaluate();
 }
 let getRandomLetter = () => {
@@ -109,29 +112,49 @@ for(i = 0; i < Math.pow(rowSize, 2); i++) {
   el.setAttribute('ondragstart', 'drag(event)');
   el.setAttribute('ondragover', 'allowDrop(event)');
   el.setAttribute('ondrop', 'drop(event)');
+  el.addEventListener('dragover', (e) => {
+    e.target.classList.add('dragover');
+  })
+  el.addEventListener('dragleave', (e) => {
+    e.target.classList.remove('dragover');
+  })
   // the gridx position of an element is the remainder of i / 5
   elContainer.dataset.gridx = i % rowSize;
   elContainer.dataset.gridy = Math.floor(i / rowSize);
-  elContainer.classList.add('grid-item')
+  elContainer.classList.add('grid-item');
   elContainer.appendChild(el);
   $('.grid').appendChild(elContainer);
 }
 
 let evaluate = () => {
-  document.querySelectorAll('.cell').forEach((cell) => {
+  let cells = [pointA, pointB];  
+  cells.forEach((cell) => {
     cell.classList.remove('green', 'yellow');
-    let gridx = parseInt(cell.dataset.gridx);
-    let gridy = parseInt(cell.dataset.gridy);
+    let gridx = parseInt(cell.parentElement.dataset.gridx);
+    let gridy = parseInt(cell.parentElement.dataset.gridy);
     let piece = parseInt(cell.dataset.piece); // if piece === 0, it's treated as "false"
-    let cellToRight, cellBelow;
-    (gridy === (rowSize - 1))
-      ? cellBelow = null
-      : cellBelow = $(`[data-gridx="${gridx}"][data-gridy="${gridy+1}"]`);
-
-      if(cellBelow === null) return
-      else if(!piece || !parseInt(cellBelow.dataset.piece)) return
-      else {
-        cell.classList.add('green');
-      }
+    let cellToRight, cellBelow, cellBelowPiece;
+    if (gridy === (rowSize - 1)) {
+      cellBelow = null;
+      cellBelowPiece = null;
+    } else {
+      cellBelow = $(`[data-gridx="${gridx}"][data-gridy="${gridy+1}"] .cell`);
+      cellBelowPiece = parseInt(cellBelow.dataset.piece);
+    }
+    console.log(piece, cellBelowPiece)
+    if(
+      piece &&
+      cellBelow &&
+      cellBelowPiece &&
+      piece === cellBelowPiece - 1
+    ) {
+      cell.classList.add('green');
+      cellBelow.classList.add('green');
+    } else if (cellBelow) {
+      cellBelow.classList.remove('green');
+      cell.classList.remove('green');
+    } else {
+      cell.classList.remove('green');
+    }
   })
 }
