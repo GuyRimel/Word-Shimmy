@@ -163,10 +163,8 @@ let evaluate = () => {
     if(document.querySelectorAll(`[data-gridy="${gridy}"] .cell.green`).length !== 5) {
         if(gridx + gridy === 8)$('.score').innerText = parseInt($('.score').innerText) - 10;
       } else {
-        $('.score').innerText = parseInt($('.score').innerText) + 100;
+        $('.score').innerText = parseInt($('.score').innerText);
         alert(goalWord + '!!!');
-        goalWordIndex = Math.floor(Math.random() * words.length);
-        goalWord = words[goalWordIndex].toUpperCase();
       }
   });
 };
