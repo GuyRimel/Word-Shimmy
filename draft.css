@@ -1,6 +1,9 @@
+
 :root {
   background: lightslategray;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+  --green: #228B22;
+  --yellow: #FFCC03;
 }
 
 :root * {
@@ -15,7 +18,6 @@ h1 {
 
 .grid {
   display: grid;
-  width: 100%;
   justify-content: center;
   grid-template-columns: repeat(5, 18vw);
   margin: 1.5em 0;
@@ -31,14 +33,15 @@ h1 {
 
 .cell {
   background: #eaeaea;
+  border: 3px inset #eaeaea;
   color: #234;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   font-size: 3em;
   font-weight: bold;
-  width: 100%;
-  height: 100%;
+  width: 97%;
+  height: 97%;
   box-shadow: 2px 2px #222a;
-  transition: all 0.2s linear;
+  transition: all 0.2s ease-out;
 }
 
 .btn:active {
@@ -53,9 +56,12 @@ h1 {
   background-color: #ccc;
 }
 
+
 /* order matters!!! */
-.yellow { background: yellow; }
-.green { background: green; }
+  
+.yellow { background: var(--yellow); border: 5px ridge var(--yellow)}
+.green { background: var(--green); border: 5px ridge var(--green)}
+.selected { border: 10px outset red; }
 
 .dragging, .dragover {
   width: 80%;

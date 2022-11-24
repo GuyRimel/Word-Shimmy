@@ -1,23 +1,5 @@
 const $ = (el) => document.querySelector(el);
-let pointA, pointB, pointAParent, pointBParent;
-// on drag, the dragging element is stored as pointA
-const drag = (e) => {
-  pointA = e.target;
-  pointAParent = pointA.parentElement;
-  pointA.classList.add("dragging");
-};
-const allowDrop = (e) => e.preventDefault();
-// on drop, the element being dropped onto is stored as pointB
-// then, each element is swapped
-const drop = (e) => {
-  pointB = e.target;
-  pointBParent = pointB.parentElement;
-  pointAParent.appendChild(pointB);
-  pointBParent.appendChild(pointA);
-  pointA.classList.remove("dragging", "dragover");
-  pointB.classList.remove("dragging", "dragover");
-  evaluate();
-};
+
 let getRandomLetter = () => {
   let letterBag = `
     AAAAAAAAAA
@@ -53,7 +35,8 @@ let getRandomLetter = () => {
 
 let rowSize = 5;
 let getRandomGridIndex = () => Math.floor(Math.random() * Math.pow(rowSize, 2));
-let goalWord = "FEAST"; // set the goalword
+let goalWordIndex = Math.floor(Math.random() * words.length);
+let goalWord = words[goalWordIndex].toUpperCase(); // set the goalword
 
 // this painfully ensures that each position is unique -_-
 let letter0 = getRandomGridIndex();
@@ -74,6 +57,7 @@ while (
 )
   letter4 = getRandomGridIndex();
 
+console.log(goalWord);
 console.log(letter0, letter1, letter2, letter3, letter4);
 
 for (i = 0; i < Math.pow(rowSize, 2); i++) {
@@ -102,16 +86,11 @@ for (i = 0; i < Math.pow(rowSize, 2); i++) {
 
   el.innerText = letter;
   el.classList.add("btn", "cell");
-  el.setAttribute("draggable", true);
-  el.setAttribute("ondragstart", "drag(event)");
-  el.setAttribute("ondragover", "allowDrop(event)");
-  el.setAttribute("ondrop", "drop(event)");
-  el.addEventListener("dragover", (e) => {
-    e.target.classList.add("dragover");
+  el.addEventListener("click", (e) => {
+    e.target.classList.toggle("selected");
+    swap();
   });
-  el.addEventListener("dragleave", (e) => {
-    e.target.classList.remove("dragover");
-  });
+
   // the gridx position of an element is the remainder of i / 5
   elContainer.dataset.gridx = i % rowSize;
   elContainer.dataset.gridy = Math.floor(i / rowSize);
@@ -120,38 +99,75 @@ for (i = 0; i < Math.pow(rowSize, 2); i++) {
   $(".grid").appendChild(elContainer);
 }
 
+let swap = () => {
+  let selections = document.querySelectorAll('.selected');
+  if(selections.length === 2) {
+    let pointA = selections[0];
+    let pointB = selections[1];
+    let pointAParent = pointA.parentElement;
+    let pointBParent = pointB.parentElement;
+    let Ax = pointA.getBoundingClientRect().x;
+    let Ay = pointA.getBoundingClientRect().y;
+    let Bx = pointB.getBoundingClientRect().x;
+    let By = pointB.getBoundingClientRect().y;
+    let movex = Bx - Ax;
+    let movey = By - Ay;
+
+    // console.log(Ax, Ay, Bx, By);
+
+    pointAParent.appendChild(pointB);
+    pointBParent.appendChild(pointA);
+    pointA.classList.remove("selected");
+    pointB.classList.remove("selected");
+    void pointA.offsetWidth;
+    pointA.style.transform = `translate(${movex}px,${movey}px)`;
+    void pointA.offsetWidth;
+    pointA.style.transform = 'none';
+    evaluate();
+  } 
+}
+
 let evaluate = () => {
   document.querySelectorAll(".cell").forEach((cell) => {
     let gridx = parseInt(cell.parentElement.dataset.gridx);
     let gridy = parseInt(cell.parentElement.dataset.gridy);
     let piece = parseInt(cell.dataset.piece); // if piece === 0, it's treated as "false"
-    let cellAbove, cellAbovePiece;
-    if (gridy === 0) {
-      cellAbove = null;
-      cellAbovePiece = null;
+    let cellLeft, cellLeftPiece;
+    if (gridx === 0) {
+      cellLeft = null;
+      cellLeftPiece = null;
     } else {
-      cellAbove = $(`[data-gridx="${gridx}"][data-gridy="${gridy - 1}"] .cell`);
-      cellAbovePiece = parseInt(cellAbove.dataset.piece);
+      cellLeft = $(`[data-gridx="${gridx - 1}"][data-gridy="${gridy}"] .cell`);
+      cellLeftPiece = parseInt(cellLeft.dataset.piece);
     }
 
-    console.log(
-      'cell:',cell.innerText, gridx, gridy,
-      '\ncellAbove:',cellAbove
-      )
+    // console.log(
+    //   'cell:',cell.innerText, gridx, gridy,
+    //   '\ncellLeft:','cellLeft?:',Boolean(cellLeft)
+    //   )
       
       
     cell.classList.remove("green", "yellow");
     
-    if (piece && cellAbovePiece) {
+    if (piece && cellLeftPiece) {
       cell.classList.add("yellow");
-      cellAbove.classList.add("yellow");
+      cellLeft.classList.add("yellow");
     }
-    if (piece && cellAbovePiece && piece === cellAbovePiece + 1) {
+    if (piece && cellLeftPiece && piece === cellLeftPiece + 1) {
       cell.classList.remove("yellow");
-      cellAbove.classList.remove("yellow");
+      cellLeft.classList.remove("yellow");
       cell.classList.add("green");
-      cellAbove.classList.add("green");
+      cellLeft.classList.add("green");
     }
+
+    if(document.querySelectorAll(`[data-gridy="${gridy}"] .cell.green`).length !== 5) {
+        if(gridx + gridy === 8)$('.score').innerText = parseInt($('.score').innerText) - 10;
+      } else {
+        $('.score').innerText = parseInt($('.score').innerText) + 100;
+        alert(goalWord + '!!!');
+        goalWordIndex = Math.floor(Math.random() * words.length);
+        goalWord = words[goalWordIndex].toUpperCase();
+      }
   });
 };
 
