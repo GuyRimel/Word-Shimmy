@@ -62,7 +62,7 @@ console.log(letter0, letter1, letter2, letter3, letter4);
 
 for (i = 0; i < Math.pow(rowSize, 2); i++) {
   let elContainer = document.createElement("div");
-  let el = document.createElement("button");
+  let el = document.createElement("div");
   let letter = getRandomLetter();
 
   if (i === letter0 || letter === goalWord.charAt(0)) {
