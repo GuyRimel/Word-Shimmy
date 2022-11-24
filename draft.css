@@ -53,8 +53,9 @@ h1 {
   background-color: #ccc;
 }
 
-.green { background: green; }
+/* order matters!!! */
 .yellow { background: yellow; }
+.green { background: green; }
 
 .dragging, .dragover {
   width: 80%;
