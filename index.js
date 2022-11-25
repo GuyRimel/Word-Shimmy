@@ -1,83 +1,72 @@
 const $ = (el) => document.querySelector(el);
 
+// set the rowSize //////////
+let rowSize = 5;
 let getRandomLetter = () => {
-  let letterBag = `
-    AAAAAAAAAA
-    BB
-    CCC
-    DDD
-    EEEEEEEEEE
-    FF
-    GG
-    HHH
-    IIIIIIII
-    JJ
-    KK
-    LLLLLL
-    MMM
-    NNNNNN
-    OOOOOOOO
-    PPPP
-    QQ
-    RRRRRRRR
-    SSSSSSSS
-    TTTTTTTT
-    UUUUUU
-    VVV
-    WW
-    XX
-    YYYYY
-    ZZ`.replace(/\s+/g, ""); // this is a regEx that removes any whitespace
-  let index;
-  index = Math.floor(Math.random() * letterBag.length);
+  let index = Math.floor(Math.random() * letterBag.length);
   return letterBag.charAt(index);
 };
 
-let rowSize = 5;
+let getRandomGoalWord = () => {
+  let goalWordIndex = Math.floor(Math.random() * words.length);
+  return words[goalWordIndex].toUpperCase();
+}
+
+// set the goalword //////////
+let goalWord =  getRandomGoalWord();
+
 let getRandomGridIndex = () => Math.floor(Math.random() * Math.pow(rowSize, 2));
-let goalWordIndex = Math.floor(Math.random() * words.length);
-let goalWord = words[goalWordIndex].toUpperCase(); // set the goalword
+
+// each character of the goalWord get a variable
+let goalChar0, goalChar1, goalChar2, goalChar3, goalChar4;
 
 // this painfully ensures that each position is unique -_-
-let letter0 = getRandomGridIndex();
-let letter1 = getRandomGridIndex();
-let letter2 = getRandomGridIndex();
-let letter3 = getRandomGridIndex();
-let letter4 = getRandomGridIndex();
-while (letter1 === letter0) letter1 = getRandomGridIndex();
-while (letter2 === letter0 || letter2 === letter1)
-  letter2 = getRandomGridIndex();
-while (letter3 === letter0 || letter3 === letter1 || letter3 === letter2)
-  letter3 = getRandomGridIndex();
+goalChar0 = getRandomGridIndex();
 while (
-  letter4 === letter0 ||
-  letter4 === letter1 ||
-  letter4 === letter2 ||
-  letter4 === letter3
+  !goalChar1 ||
+  goalChar1 === goalChar0
+) goalChar1 = getRandomGridIndex();
+while (
+  !goalChar2 ||
+  goalChar2 === goalChar0 ||
+  goalChar2 === goalChar1
+) goalChar2 = getRandomGridIndex();
+while (
+  !goalChar3 ||
+  goalChar3 === goalChar0 ||
+  goalChar3 === goalChar1 ||
+  goalChar3 === goalChar2
+) goalChar3 = getRandomGridIndex();
+while (
+  !goalChar4 ||
+  goalChar4 === goalChar0 ||
+  goalChar4 === goalChar1 ||
+  goalChar4 === goalChar2 ||
+  goalChar4 === goalChar3
 )
-  letter4 = getRandomGridIndex();
+  goalChar4 = getRandomGridIndex();
 
 console.log(goalWord);
-console.log(letter0, letter1, letter2, letter3, letter4);
+console.log(goalChar0, goalChar1, goalChar2, goalChar3, goalChar4);
 
 for (i = 0; i < Math.pow(rowSize, 2); i++) {
   let elContainer = document.createElement("div");
-  let el = document.createElement("div");
+  let el = document.createElement("button");
   let letter = getRandomLetter();
 
-  if (i === letter0 || letter === goalWord.charAt(0)) {
+  if (i === goalChar0 || letter === goalWord.charAt(0)) {
     letter = goalWord.charAt(0);
     el.dataset.piece = 1;
-  } else if (i === letter1 || letter === goalWord.charAt(1)) {
+  } else if (i === goalChar1 || letter === goalWord.charAt(1)) {
     letter = goalWord.charAt(1);
     el.dataset.piece = 2;
-  } else if (i === letter2 || letter === goalWord.charAt(2)) {
+  } else if (i === goalChar2 || letter === goalWord.charAt(2)) {
     letter = goalWord.charAt(2);
     el.dataset.piece = 3;
-  } else if (i === letter3 || letter === goalWord.charAt(3)) {
+  } else if (i === goalChar3 || letter === goalWord.charAt(3)) {
     letter = goalWord.charAt(3);
     el.dataset.piece = 4;
-  } else if (i === letter4 || letter === goalWord.charAt(4)) {
+  } else if (i === goalChar4 || letter === goalWord.charAt(4)) {
     letter = goalWord.charAt(4);
     el.dataset.piece = 5;
   } else {
@@ -100,8 +89,8 @@ for (i = 0; i < Math.pow(rowSize, 2); i++) {
 }
 
 let swap = () => {
-  let selections = document.querySelectorAll('.selected');
-  if(selections.length === 2) {
+  let selections = document.querySelectorAll(".selected");
+  if (selections.length === 2) {
     let pointA = selections[0];
     let pointB = selections[1];
     let pointAParent = pointA.parentElement;
@@ -122,10 +111,10 @@ let swap = () => {
     void pointA.offsetWidth;
     pointA.style.transform = `translate(${movex}px,${movey}px)`;
     void pointA.offsetWidth;
-    pointA.style.transform = 'none';
+    pointA.style.transform = "none";
     evaluate();
-  } 
-}
+  }
+};
 
 let evaluate = () => {
   document.querySelectorAll(".cell").forEach((cell) => {
@@ -145,10 +134,9 @@ let evaluate = () => {
     //   'cell:',cell.innerText, gridx, gridy,
     //   '\ncellLeft:','cellLeft?:',Boolean(cellLeft)
     //   )
-      
-      
+
     cell.classList.remove("green", "yellow");
-    
+
     if (piece && cellLeftPiece) {
       cell.classList.add("yellow");
       cellLeft.classList.add("yellow");
@@ -160,12 +148,16 @@ let evaluate = () => {
       cellLeft.classList.add("green");
     }
 
-    if(document.querySelectorAll(`[data-gridy="${gridy}"] .cell.green`).length !== 5) {
-        if(gridx + gridy === 8)$('.score').innerText = parseInt($('.score').innerText) - 10;
-      } else {
-        $('.score').innerText = parseInt($('.score').innerText);
-        alert(goalWord + '!!!');
-      }
+    if (
+      document.querySelectorAll(`[data-gridy="${gridy}"] .cell.green`)
+        .length !== 5
+    ) {
+      if (gridx + gridy === 8)
+        $(".score").innerText = parseInt($(".score").innerText) - 10;
+    } else {
+      $(".score").innerText = parseInt($(".score").innerText);
+      alert(goalWord + "!!!");
+    }
   });
 };
 

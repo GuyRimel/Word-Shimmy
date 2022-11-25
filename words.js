@@ -1,3 +1,31 @@
+let letterBag = `
+AAAAAAAAAA
+BB
+CCC
+DDD
+EEEEEEEEEE
+FF
+GG
+HHH
+IIIIIIII
+JJ
+KK
+LLLLLL
+MMM
+NNNNNN
+OOOOOOOO
+PPPP
+QQ
+RRRRRRRR
+SSSSSSSS
+TTTTTTTT
+UUUUUU
+VVV
+WW
+XX
+YYYYY
+ZZ`.replace(/\s+/g, ""); // this is a regEx that removes any whitespace
+
 let words = [
   "abide",
   "abort",

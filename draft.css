@@ -1,67 +1,86 @@
 
 :root {
-  background: lightslategray;
+  box-sizing: border-box;
+  margin: 0;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-  --green: #228B22;
+  background: #066f2f;
+  --gridWidth: 90vw;
+  --cellWidth: calc(var(--gridWidth)/5);
+  --header-bg: #53bc7c;
+  --header-text: #EBFFFF;
+  --top-bar-color:#B9FFE2;
+  --top-bar-text: #222;
+  --cell-color: #eaeaea;
+  --cell-text-color: #212;
+  --green: #30c209;
   --yellow: #FFCC03;
+  --selected: #f01;
 }
 
 :root * {
   margin: 0;
+  box-sizing: border-box;
 }
 
 h1 {
+  color: var(--header-text);
   text-align: center;
-  background: coral;
-  padding: 1em;
+  background: var(--header-bg);
+  padding: .5em;
+}
+
+.grid-container {
+  width: 100vw;
+  height: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .grid {
   display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  width: var(--gridWidth);
+  height: var(--gridWidth);
   justify-content: center;
-  grid-template-columns: repeat(5, 18vw);
-  margin: 1.5em 0;
+  background: #444;
 }
 
 .grid-item {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 18vw;
-  border: 1px inset #555;
 }
 
 .cell {
-  background: #eaeaea;
-  border: 3px inset #eaeaea;
-  color: #234;
+  background: var(--cell-color);
+  border: 8px ridge var(--cell-color);
+  color: var(--cell-text-color);
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   font-size: 3em;
   font-weight: bold;
-  box-shadow: 2px 2px #222a;
+  box-shadow: 2px 2px #444;
   transition: all 0.2s ease-out;
+  width: 92%;
+  height: 92%;
 }
 
 .btn:active {
   transform: translateY(2px);
-  background: cyan;
+  background: var(--selected);
 }
 
 .top-bar {
   display: flex;
   justify-content: space-evenly;
-  padding: 1.25em;
-  background-color: #ccc;
+  padding: 1em;
+  background-color: var(--top-bar-color);
+  color: var(--top-bar-text);
 }
 
 
 /* order matters!!! */
   
-.yellow { background: var(--yellow); border: 5px ridge var(--yellow)}
-.green { background: var(--green); border: 5px ridge var(--green)}
-.selected { border: 10px outset red; }
-
-.dragging, .dragover {
-  width: 80%;
-  height: 80%;
-}
+.yellow { background: var(--yellow); border: 8px ridge var(--yellow)}
+.green { background: var(--green); border: 8px ridge var(--green)}
+.selected { border: 8px solid var(--selected); }
