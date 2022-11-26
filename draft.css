@@ -48,11 +48,14 @@ h1 {
 
 .grid-item {
   display: flex;
+  width: 100%;
+  height: 100%;
   align-items: center;
   justify-content: center;
 }
 
 .cell {
+  width: inherit;
   background: var(--cell-color);
   border: 8px ridge var(--cell-color);
   color: var(--cell-text-color);
@@ -61,8 +64,6 @@ h1 {
   font-weight: bold;
   box-shadow: 2px 2px #444;
   transition: all 0.2s ease-out;
-  width: 92%;
-  height: 92%;
 }
 
 .btn:active {
