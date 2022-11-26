@@ -1,95 +1,95 @@
-const $ = (el) => document.querySelector(el);
+const $ = (el) => document.querySelector(el); // shorthand for querySelector
+const $$ = (el) => document.querySelectorAll(el); // shorthand for querySelectorAll
 
-// set the rowSize //////////
+// GLOBAL VARIABLES //////////
 let rowSize = 5;
-let getRandomLetter = () => {
+let goalWord;
+// each character of the goalWord gets a variable for it's grid index
+let goalChar0index, goalChar1index, goalChar2index, goalChar3index, goalChar4index; 
+
+// UTILITY FUNCS //////////
+(function buildGrid() {
+  for (i = 0; i < Math.pow(rowSize, 2); i++) {
+    let elContainer = document.createElement("div");
+    let el = document.createElement("button");
+    // the gridx position of an element is the remainder of i / 5
+    elContainer.dataset.gridx = i % rowSize;
+    elContainer.dataset.gridy = Math.floor(i / rowSize);
+    elContainer.classList.add("grid-item");
+    elContainer.appendChild(el);
+    $(".grid").appendChild(elContainer);
+    el.classList.add("btn", "cell");
+    el.addEventListener("click", (e) => {
+      e.target.classList.toggle("selected");
+      swap();
+    });
+  }
+})();
+
+function getRandomLetter() {
   let index = Math.floor(Math.random() * letterBag.length);
   return letterBag.charAt(index);
 };
 
-let getRandomGoalWord = () => {
+function getRandomGridIndex() {
+  return Math.floor(Math.random() * Math.pow(rowSize, 2));
+};
+
+function setRandomGoalWord() {
   let goalWordIndex = Math.floor(Math.random() * words.length);
-  return words[goalWordIndex].toUpperCase();
+  goalWord = words[goalWordIndex].toUpperCase();
 }
 
-// set the goalword //////////
-let goalWord =  getRandomGoalWord();
-
-let getRandomGridIndex = () => Math.floor(Math.random() * Math.pow(rowSize, 2));
-
-// each character of the goalWord get a variable
-let goalChar0, goalChar1, goalChar2, goalChar3, goalChar4;
-
 // this painfully ensures that each position is unique -_-
-goalChar0 = getRandomGridIndex();
-while (
-  !goalChar1 ||
-  goalChar1 === goalChar0
-) goalChar1 = getRandomGridIndex();
-while (
-  !goalChar2 ||
-  goalChar2 === goalChar0 ||
-  goalChar2 === goalChar1
-) goalChar2 = getRandomGridIndex();
-while (
-  !goalChar3 ||
-  goalChar3 === goalChar0 ||
-  goalChar3 === goalChar1 ||
-  goalChar3 === goalChar2
-) goalChar3 = getRandomGridIndex();
-while (
-  !goalChar4 ||
-  goalChar4 === goalChar0 ||
-  goalChar4 === goalChar1 ||
-  goalChar4 === goalChar2 ||
-  goalChar4 === goalChar3
-)
-  goalChar4 = getRandomGridIndex();
+function setGoalCharIndexes() {
+  goalChar0index = getRandomGridIndex();
+  while (
+    !goalChar1index ||
+    goalChar1index === goalChar0index
+    ) goalChar1index = getRandomGridIndex();
+    while (
+      !goalChar2index ||
+    goalChar2index === goalChar0index ||
+    goalChar2index === goalChar1index
+    ) goalChar2index = getRandomGridIndex();
+    while (
+      !goalChar3index ||
+    goalChar3index === goalChar0index ||
+    goalChar3index === goalChar1index ||
+    goalChar3index === goalChar2index
+    ) goalChar3index = getRandomGridIndex();
+    while (
+      !goalChar4index ||
+      goalChar4index === goalChar0index ||
+      goalChar4index === goalChar1index ||
+      goalChar4index === goalChar2index ||
+    goalChar4index === goalChar3index
+  ) goalChar4index = getRandomGridIndex();
+};
 
-console.log(goalWord);
-console.log(goalChar0, goalChar1, goalChar2, goalChar3, goalChar4);
+function setGridLetters() {
+  $$('.cell').forEach((cell, i) => {
+    let letter = getRandomLetter();
+    if (i === goalChar0index) {
+      letter = goalWord.charAt(0);
+    } else if (i === goalChar1index) {
+      letter = goalWord.charAt(1);
+    } else if (i === goalChar2index) {
+      letter = goalWord.charAt(2);
+    } else if (i === goalChar3index) {
+      letter = goalWord.charAt(3);
+    } else if (i === goalChar4index) {
+      letter = goalWord.charAt(4);
+    }
 
-for (i = 0; i < Math.pow(rowSize, 2); i++) {
-  let elContainer = document.createElement("div");
-  let el = document.createElement("button");
-  let letter = getRandomLetter();
-
-  if (i === goalChar0 || letter === goalWord.charAt(0)) {
-    letter = goalWord.charAt(0);
-    el.dataset.piece = 1;
-  } else if (i === goalChar1 || letter === goalWord.charAt(1)) {
-    letter = goalWord.charAt(1);
-    el.dataset.piece = 2;
-  } else if (i === goalChar2 || letter === goalWord.charAt(2)) {
-    letter = goalWord.charAt(2);
-    el.dataset.piece = 3;
-  } else if (i === goalChar3 || letter === goalWord.charAt(3)) {
-    letter = goalWord.charAt(3);
-    el.dataset.piece = 4;
-  } else if (i === goalChar4 || letter === goalWord.charAt(4)) {
-    letter = goalWord.charAt(4);
-    el.dataset.piece = 5;
-  } else {
-    el.dataset.piece = 0;
-  }
-
-  el.innerText = letter;
-  el.classList.add("btn", "cell");
-  el.addEventListener("click", (e) => {
-    e.target.classList.toggle("selected");
-    swap();
-  });
-
-  // the gridx position of an element is the remainder of i / 5
-  elContainer.dataset.gridx = i % rowSize;
-  elContainer.dataset.gridy = Math.floor(i / rowSize);
-  elContainer.classList.add("grid-item");
-  elContainer.appendChild(el);
-  $(".grid").appendChild(elContainer);
+    let indexOfLetter = goalWord.indexOf(letter);
+    cell.innerText = letter;
+    cell.dataset.piece = indexOfLetter + 1;
+  })
 }
 
 let swap = () => {
-  let selections = document.querySelectorAll(".selected");
+  let selections = $$(".selected");
   if (selections.length === 2) {
     let pointA = selections[0];
     let pointB = selections[1];
@@ -101,9 +101,9 @@ let swap = () => {
     let By = pointB.getBoundingClientRect().y;
     let movex = Bx - Ax;
     let movey = By - Ay;
-
+    
     // console.log(Ax, Ay, Bx, By);
-
+    
     pointAParent.appendChild(pointB);
     pointBParent.appendChild(pointA);
     pointA.classList.remove("selected");
@@ -115,6 +115,17 @@ let swap = () => {
     evaluate();
   }
 };
+
+function dealEm(){
+  setRandomGoalWord();
+  setGoalCharIndexes();
+  setGridLetters();
+}
+
+dealEm();
+
+console.log(goalWord);
+console.log(goalChar0index, goalChar1index, goalChar2index, goalChar3index, goalChar4index);
 
 let evaluate = () => {
   document.querySelectorAll(".cell").forEach((cell) => {
