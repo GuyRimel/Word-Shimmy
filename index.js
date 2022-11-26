@@ -4,6 +4,7 @@ const $$ = (el) => document.querySelectorAll(el); // shorthand for querySelector
 // GLOBAL VARIABLES //////////
 let rowSize = 5;
 let goalWord;
+let moves = 10;
 // each character of the goalWord gets a variable for it's grid index
 let goalChar0index, goalChar1index, goalChar2index, goalChar3index, goalChar4index; 
 
@@ -103,7 +104,8 @@ let swap = () => {
     let movey = By - Ay;
     
     // console.log(Ax, Ay, Bx, By);
-    
+    moves--;
+    $('.moves').innerText = moves;
     pointAParent.appendChild(pointB);
     pointBParent.appendChild(pointA);
     pointA.classList.remove("selected");
@@ -141,17 +143,13 @@ let evaluate = () => {
       cellLeftPiece = parseInt(cellLeft.dataset.piece);
     }
 
-    // console.log(
-    //   'cell:',cell.innerText, gridx, gridy,
-    //   '\ncellLeft:','cellLeft?:',Boolean(cellLeft)
-    //   )
-
     cell.classList.remove("green", "yellow");
 
     if (piece && cellLeftPiece) {
       cell.classList.add("yellow");
       cellLeft.classList.add("yellow");
     }
+
     if (piece && cellLeftPiece && piece === cellLeftPiece + 1) {
       cell.classList.remove("yellow");
       cellLeft.classList.remove("yellow");
@@ -159,17 +157,19 @@ let evaluate = () => {
       cellLeft.classList.add("green");
     }
 
-    if (
-      document.querySelectorAll(`[data-gridy="${gridy}"] .cell.green`)
-        .length !== 5
-    ) {
-      if (gridx + gridy === 8)
-        $(".score").innerText = parseInt($(".score").innerText) - 10;
-    } else {
-      $(".score").innerText = parseInt($(".score").innerText);
-      alert(goalWord + "!!!");
+    let isVictory = false;
+    if(gridx + gridy === 8) {
+      for(i = 0; i < 5; i++) {
+        if($$(`[data-gridy="${i}"] .cell.green`).length === 5) {
+          isVictory = true;
+        }
+      }
     }
-  });
-};
+    if(isVictory) alert(goalWord + '!!!');
+    else if(gridx + gridy === 8) {
+      $('.score').innerText = parseInt($('.score').innerText) - 10;
+    }
+  })
+}
 
 evaluate();

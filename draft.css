@@ -55,12 +55,13 @@ h1 {
 }
 
 .cell {
-  width: inherit;
+  width: 94%;
+  height: 94%;
   background: var(--cell-color);
   border: 8px ridge var(--cell-color);
   color: var(--cell-text-color);
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-  font-size: 3em;
+  font-size: 12vw;
   font-weight: bold;
   box-shadow: 2px 2px #444;
   transition: all 0.2s ease-out;
