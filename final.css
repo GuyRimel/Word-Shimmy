@@ -53,8 +53,8 @@ h1 {
 .grid {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 1fr, 1fr, 1fr, 1fr, 1fr;
-  grid-template-columns: repeat(5, 1fr);
+  -ms-grid-columns: 20% 20% 20% 20% 20%;
+  grid-template-columns: 20% 20% 20% 20% 20%;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
@@ -66,7 +66,6 @@ h1 {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  width: 100%;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -76,7 +75,6 @@ h1 {
 }
 
 .cell {
-  width: inherit;
   background: var(--cell-color);
   border: 8px ridge var(--cell-color);
   color: var(--cell-text-color);

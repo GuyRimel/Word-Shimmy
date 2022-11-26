@@ -37,7 +37,7 @@ h1 {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: 20% 20% 20% 20% 20%;
   justify-content: center;
   background: #444;
   margin-top: 1em;
@@ -45,13 +45,11 @@ h1 {
 
 .grid-item {
   display: flex;
-  width: 100%;
   align-items: center;
   justify-content: center;
 }
 
 .cell {
-  width: inherit;
   background: var(--cell-color);
   border: 8px ridge var(--cell-color);
   color: var(--cell-text-color);
