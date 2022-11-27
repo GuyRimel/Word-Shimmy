@@ -161,11 +161,10 @@ let evaluate = () => {
     if(isVictory) {
       alert(goalWord + '!!!');
       $('.moves').innerText = parseInt($('.moves').innerText) + 10;
-      $('.score').innerText = parseInt($('.score').innerText) + 200;
+      $('.score').innerText = parseInt($('.score').innerText) + 100;
       dealEm();
     } else if(gridx + gridy === 8) {
       $('.moves').innerText = parseInt($('.moves').innerText) - 1;
-      $('.score').innerText = parseInt($('.score').innerText) - 10;
       if(parseInt($('.moves').innerText) < 1) {
         gameOver();
       }
@@ -195,7 +194,7 @@ function gameOver() {
 
 function startGame() {
   $('.moves').innerText = 11;
-  $('.score').innerText = 110;
+  $('.score').innerText = 0;
   dealEm();
 }
 startGame();
