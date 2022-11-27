@@ -188,6 +188,7 @@ function gameOver() {
     `GAME OVER
     Final Score: ${$('.score').innerText}
     
+    The word was "${goalWord}"
     Play Again?`);
   if(response) startGame();
 }
