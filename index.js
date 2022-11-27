@@ -5,12 +5,13 @@ const $$ = (el) => document.querySelectorAll(el); // shorthand for querySelector
 let rowSize = 5;
 let goalWord;
 let moves = 10;
+let score = 100;
 // each character of the goalWord gets a variable for it's grid index
 let goalChar0index, goalChar1index, goalChar2index, goalChar3index, goalChar4index; 
 
 // UTILITY FUNCS //////////
 (function buildGrid() {
-  for (i = 0; i < Math.pow(rowSize, 2); i++) {
+  for (i = 0; i < 25; i++) {
     let elContainer = document.createElement("div");
     let el = document.createElement("button");
     // the gridx position of an element is the remainder of i / 5
@@ -96,9 +97,7 @@ let swap = () => {
     let pointB = selections[1];
     let pointAParent = pointA.parentElement;
     let pointBParent = pointB.parentElement;
-    
-    moves--;
-    $('.moves').innerText = moves;
+
     pointAParent.appendChild(pointB);
     pointBParent.appendChild(pointA);
     pointA.classList.remove("selected");
@@ -108,61 +107,94 @@ let swap = () => {
   }
 };
 
-function dealEm(){
-  setRandomGoalWord();
-  setGoalCharIndexes();
-  setGridLetters();
-}
-
-dealEm();
-
-console.log(goalWord);
-console.log(goalChar0index, goalChar1index, goalChar2index, goalChar3index, goalChar4index);
-
 let evaluate = () => {
   document.querySelectorAll(".cell")
   .forEach(cell => {
     let isVictory = false;
     let gridx = parseInt(cell.parentElement.dataset.gridx);
     let gridy = parseInt(cell.parentElement.dataset.gridy);
-    let piece = parseInt(cell.dataset.piece); // if piece === 0, it's treated as "false"
-    let cellLeft, cellLeftPiece;
+    let cellLetter = cell.innerText;
+    let letter0 = goalWord.charAt(0);
+    let letter1 = goalWord.charAt(1);
+    let letter2 = goalWord.charAt(2);
+    let letter3 = goalWord.charAt(3);
+    let letter4 = goalWord.charAt(4);
+    let cellLeft, cellLeftLetter;
+
     if (gridx === 0) {
-      cellLeft = null;
-      cellLeftPiece = null;
+      cellLeftLetter = null;
     } else {
       cellLeft = $(`[data-gridx="${gridx - 1}"][data-gridy="${gridy}"] .cell`);
-      cellLeftPiece = parseInt(cellLeft.dataset.piece);
+      cellLeftLetter = cellLeft.innerText;
     }
 
     cell.classList.remove("green", "yellow");
 
-    if(piece && cellLeftPiece && piece === cellLeftPiece + 1) {
-      console.log('green');
-      cell.classList.add("green");
-      cellLeft.classList.add("green");
+    if(
+      (cellLeftLetter === letter0 && cellLetter === letter1) ||
+      (cellLeftLetter === letter1 && cellLetter === letter2) ||
+      (cellLeftLetter === letter2 && cellLetter === letter3) ||
+      (cellLeftLetter === letter3 && cellLetter === letter4)
+      ) {
+        cell.classList.add("green");
+        cellLeft.classList.add("green");
     }
     
-    else if(piece && cellLeftPiece) {
-      console.log('yellow');
-      cell.classList.add("green");
-      cellLeft.classList.add("green");
+    else if(goalWord.indexOf(cellLetter) > -1 && goalWord.indexOf(cellLeftLetter) > -1) {
       cell.classList.add("yellow");
-      cellLeft.classList.add("yellow");
+      if(cellLeft)cellLeft.classList.add("yellow");
     }
 
     if(gridx + gridy === 8) {
       for(i = 0; i < 5; i++) {
-        if($$(`[data-gridy="${i}"] .cell.green`).length === 5) {
+        let rowString ='';
+        for(ii = 0; ii < 5; ii++) {
+          rowString += $(`[data-gridy="${i}"][data-gridx="${ii}"] .cell`).innerText;
+        }
+        if(rowString === goalWord) {
           isVictory = true;
+          break;
         }
       }
     }
-    if(isVictory) alert(goalWord + '!!!');
-    else if(gridx + gridy === 8) {
+
+    if(isVictory) {
+      alert(goalWord + '!!!');
+      $('.moves').innerText = parseInt($('.moves').innerText) + 10;
+      $('.score').innerText = parseInt($('.score').innerText) + 200;
+      dealEm();
+    } else if(gridx + gridy === 8) {
+      $('.moves').innerText = parseInt($('.moves').innerText) - 1;
       $('.score').innerText = parseInt($('.score').innerText) - 10;
+      if(parseInt($('.moves').innerText) < 1) {
+        gameOver();
+      }
     }
   })
 }
 
-evaluate();
+function dealEm(){
+  setRandomGoalWord();
+  setGoalCharIndexes();
+  setGridLetters();
+  evaluate();
+
+  console.log(goalWord);
+  console.log(goalChar0index, goalChar1index, goalChar2index, goalChar3index, goalChar4index);
+}
+
+function gameOver() {
+  let response = confirm(
+    `GAME OVER
+    Final Score: ${$('.score').innerText}
+    
+    Play Again?`);
+  if(response) startGame();
+}
+
+function startGame() {
+  $('.moves').innerText = 11;
+  $('.score').innerText = 110;
+  dealEm();
+}
+startGame();
