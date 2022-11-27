@@ -28,7 +28,7 @@ h1 {
 .top-bar {
   display: flex;
   justify-content: space-evenly;
-  padding: 1em;
+  padding: 0.4em;
   background-color: var(--top-bar-color);
   color: var(--top-bar-text);
 }
