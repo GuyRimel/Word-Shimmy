@@ -4,6 +4,7 @@
   margin: 0;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   background: #066f2f;
+  background: darkcyan;
   --gridWidth: 90vw;
   --cellWidth: calc(var(--gridWidth)/5);
   --header-bg: #53bc7c;
