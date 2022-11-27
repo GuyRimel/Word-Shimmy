@@ -96,24 +96,14 @@ let swap = () => {
     let pointB = selections[1];
     let pointAParent = pointA.parentElement;
     let pointBParent = pointB.parentElement;
-    let Ax = pointA.getBoundingClientRect().x;
-    let Ay = pointA.getBoundingClientRect().y;
-    let Bx = pointB.getBoundingClientRect().x;
-    let By = pointB.getBoundingClientRect().y;
-    let movex = Bx - Ax;
-    let movey = By - Ay;
     
-    // console.log(Ax, Ay, Bx, By);
     moves--;
     $('.moves').innerText = moves;
     pointAParent.appendChild(pointB);
     pointBParent.appendChild(pointA);
     pointA.classList.remove("selected");
     pointB.classList.remove("selected");
-    void pointA.offsetWidth;
-    pointA.style.transform = `translate(${movex}px,${movey}px)`;
-    void pointA.offsetWidth;
-    pointA.style.transform = "none";
+
     evaluate();
   }
 };
@@ -130,7 +120,9 @@ console.log(goalWord);
 console.log(goalChar0index, goalChar1index, goalChar2index, goalChar3index, goalChar4index);
 
 let evaluate = () => {
-  document.querySelectorAll(".cell").forEach((cell) => {
+  document.querySelectorAll(".cell")
+  .forEach(cell => {
+    let isVictory = false;
     let gridx = parseInt(cell.parentElement.dataset.gridx);
     let gridy = parseInt(cell.parentElement.dataset.gridy);
     let piece = parseInt(cell.dataset.piece); // if piece === 0, it's treated as "false"
@@ -145,19 +137,20 @@ let evaluate = () => {
 
     cell.classList.remove("green", "yellow");
 
-    if (piece && cellLeftPiece) {
+    if(piece && cellLeftPiece && piece === cellLeftPiece + 1) {
+      console.log('green');
+      cell.classList.add("green");
+      cellLeft.classList.add("green");
+    }
+    
+    else if(piece && cellLeftPiece) {
+      console.log('yellow');
+      cell.classList.add("green");
+      cellLeft.classList.add("green");
       cell.classList.add("yellow");
       cellLeft.classList.add("yellow");
     }
 
-    if (piece && cellLeftPiece && piece === cellLeftPiece + 1) {
-      cell.classList.remove("yellow");
-      cellLeft.classList.remove("yellow");
-      cell.classList.add("green");
-      cellLeft.classList.add("green");
-    }
-
-    let isVictory = false;
     if(gridx + gridy === 8) {
       for(i = 0; i < 5; i++) {
         if($$(`[data-gridy="${i}"] .cell.green`).length === 5) {
