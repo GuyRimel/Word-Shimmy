@@ -17,11 +17,6 @@
   --selected: #f01;
 }
 
-* {
-  margin: 0;
-  box-sizing: border-box;
-}
-
 h1 {
   margin: 0;
   color: var(--header-text);
@@ -63,8 +58,6 @@ h1 {
   border: 8px ridge var(--cell-color);
   color: var(--cell-text-color);
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-  font-size: 2.5em;
-  font-weight: bold;
   box-shadow: 2px 2px #444;
   transition: all 0.2s ease-out;
 }
