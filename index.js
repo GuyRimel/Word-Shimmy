@@ -5,6 +5,7 @@ const $$ = (el) => document.querySelectorAll(el); // shorthand for querySelector
 let rowSize = 5;
 let goalWord;
 let moves = 10;
+let movesItTook = 0;
 let score = 100;
 // each character of the goalWord gets a variable for it's grid index
 let goalChar0index, goalChar1index, goalChar2index, goalChar3index, goalChar4index; 
@@ -160,11 +161,16 @@ let evaluate = () => {
 
     if(isVictory) {
       alert(goalWord + '!!!');
-      $('.moves').innerText = parseInt($('.moves').innerText) + 10;
-      $('.score').innerText = parseInt($('.score').innerText) + 100;
+      $('.moves').innerText = parseInt($('.moves').innerText) + 7;
+      if(parseInt($('.moves').innerText) > 20) {
+        $('.moves').innerText = 21;
+      }
+      $('.score').innerText = parseInt($('.score').innerText) + Math.round(500 / movesItTook);
+      movesItTook = 0;
       dealEm();
     } else if(gridx + gridy === 8) {
       $('.moves').innerText = parseInt($('.moves').innerText) - 1;
+      movesItTook++;
       if(parseInt($('.moves').innerText) < 1) {
         gameOver();
       }
@@ -191,6 +197,9 @@ function gameOver() {
     Play Again?`);
   if(response) startGame();
 }
+
+function setMoves(amt) { $('.moves').innerText = amt; }
+function setScore(amt) { $('.score').innerText = amt; }
 
 function startGame() {
   $('.moves').innerText = 11;
