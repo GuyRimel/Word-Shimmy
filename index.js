@@ -7,8 +7,9 @@ let goalWord;
 let moves = 10;
 let movesItTook = 0;
 let moveBonus = 9;
-let maxMoves = 25;
+let maxMoves = 20;
 let score = 0;
+let multiplier = 1;
 let message = '';
 // each character of the goalWord gets a variable for it's grid index
 let goalChar0index,
@@ -173,15 +174,16 @@ let evaluate = () => {
 
   if (isVictory) {
     moves += moveBonus;
-    if (moves > maxMoves) {
+    if (moves >= maxMoves) {
       moves = maxMoves;
       message = "bonus"
-      score += 100;
+      multiplier += 0.2;
     } else {
       message = "victory"
+      multiplier = 1;
     }
     say(message);
-    score += Math.round(500 / movesItTook);
+    score += Math.round(500 / movesItTook) * multiplier;
     movesItTook = 0;
     updateHUD();
     dealEm();
@@ -201,19 +203,20 @@ let evaluate = () => {
 function say(message) {
   $('.banner-text').classList.remove('hidden');
   if (message === "victory") {
-    $('.banner-text').innerText = goalWord + '!!!';
+    $('.banner-text').innerHTML = goalWord + '! 😀';
   }
   else if(message === "bonus") {
-    $('.banner-text').innerText =
-      `${goalWord}!!!!!
-        MOVE MAX-OUT BONUS!!! +100 POINTS`
+    $('.banner-text').innerHTML =
+      `${goalWord}!!! 🤩
+        <div class="cyan-text">MOVE MAX-OUT! MULTIPLIER UP!</div>`
   }
-  setTimeout(()=>{$('.banner-text').classList.add('hidden')}, 3500);
 }
 
 function updateHUD() {
   $(".moves").innerText = moves;
   $(".score").innerText = score;
+  $(".multiplier").innerText = multiplier;
+  if(movesItTook >= 1) { $('.banner-text').classList.add('hidden') }
 }
 
 function dealEm() {
