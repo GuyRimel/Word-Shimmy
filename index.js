@@ -201,12 +201,12 @@ let evaluate = () => {
 function say(message) {
   $('.banner-text').classList.remove('hidden');
   if (message === "victory") {
-    $('.banner-text').innerText = goalWord + '!!!' + '😀';
+    $('.banner-text').innerText = goalWord + '!!!';
   }
   else if(message === "bonus") {
     $('.banner-text').innerText =
       `${goalWord}!!!!!
-        MOVE MAX-OUT BONUS!!! +100 POINTS 😱`
+        MOVE MAX-OUT BONUS!!! +100 POINTS`
   }
   setTimeout(()=>{$('.banner-text').classList.add('hidden')}, 3500);
 }
