@@ -11,7 +11,9 @@ let maxMoves = 20;
 let score = 0;
 let multiplier = 1;
 let bonusStreak = 0;
-let message = '';
+let message = "";
+let guessWord = "";
+let isVictory = false;
 // each character of the goalWord gets a variable for it's grid index
 let goalChar0index,
   goalChar1index,
@@ -35,7 +37,45 @@ let goalChar0index,
     });
     $(".grid").appendChild(elContainer);
   }
+  let skipBtn = document.createElement('button');
+  let guessBtn = document.createElement('button');
+  
+  skipBtn.innerText = 'Skip';
+  skipBtn.classList.add('btn', 'skip-btn');
+  skipBtn.addEventListener('click', skip);
+  guessBtn.innerText = 'Guess';
+  guessBtn.classList.add('btn', 'guess-btn');
+  guessBtn.addEventListener('click', guess);
+  $(".grid").appendChild(skipBtn);
+  $(".grid").appendChild(guessBtn);
 })();
+
+function guess() {
+  guessWord = prompt("The word is...", "");
+  if(!guessWord) return;
+  else if(guessWord.toUpperCase() === goalWord) {
+    isVictory = true;
+    evaluate();
+  } else {
+    moves -= 2;
+    evaluate();
+  }
+  clearSelections();
+}
+
+function skip() {
+  moves -= 2;
+  message = "skipped";
+  evaluate();
+  say(message);
+  dealEm();
+  clearSelections();
+}
+
+function clearSelections() {
+  let selections = $$(".selected");
+  selections.forEach((selection)=> selection.classList.remove('selected'));
+}
 
 function getRandomLetter() {
   let index = Math.floor(Math.random() * letterBag.length);
@@ -116,7 +156,7 @@ function swap(target) {
     colorize();
     evaluate();
   }
-};
+}
 
 function colorize() {
   document.querySelectorAll(".cell").forEach((cell) => {
@@ -155,10 +195,9 @@ function colorize() {
       if (cellLeft) cellLeft.classList.add("yellow");
     }
   });
-};
+}
 
 function evaluate() {
-  let isVictory = false;
   for (i = 0; i < 5; i++) {
     let rowString = "";
     for (ii = 0; ii < 5; ii++) {
@@ -174,54 +213,49 @@ function evaluate() {
     moves += moveBonus;
     if (moves >= maxMoves && bonusStreak) {
       moves = maxMoves;
-      message = "bonus streak"
+      message = "bonus streak";
       bonusStreak++;
       multiplier += bonusStreak * 0.5;
-    }
-    else if (moves >= maxMoves) {
+    } else if (moves >= maxMoves) {
       moves = maxMoves;
       bonusStreak++;
-      message = "bonus"
+      message = "bonus";
       multiplier += 0.5;
     } else {
-      message = "victory"
+      message = "victory";
       multiplier = 1;
       bonusStreak = 0;
     }
-    score += Math.round(500 / movesItTook * multiplier);
+    score += Math.round((500 / movesItTook) * multiplier);
     movesItTook = 0;
-
-    say(message);
     updateHUD();
+    say(message);
     dealEm();
   } else {
     moves--;
     movesItTook++;
     updateHUD();
-    console.log('moves: ', moves, '\nscore: ', score)
     if (moves < 1) {
       gameOver();
-      console.log("moves: ", moves);
     }
   }
-};
+}
 
 function say(message) {
-  $('.banner-text').classList.remove('hidden');
-  if(message === "bonus streak") {
-    $('.banner-text').innerHTML =
-      `${goalWord}!
-        <div class="cyan-text">😆 BONUS STREAK ${bonusStreak}! <span class="yellow-text">x ${multiplier}!</span></div>`
-  }
-  else if(message === "bonus") {
-    $('.banner-text').innerHTML =
-      `${goalWord}!
-        <div class="cyan-text">😀 BONUS! <span class="yellow-text">x ${multiplier}!</span></div>`
+  $(".banner").classList.remove("hidden");
+  $(".banner-text-bottom").innerText = `* ${goalWord} *`;
+  
+  if (message === "bonus streak") {
+    $(".banner-text-top").innerHTML =
+    `😆 BONUS STREAK ${bonusStreak}<span class="yellow-text">x ${multiplier}!</span>`;
+  } else if (message === "bonus") {
+    $(".banner-text-top").innerHTML = `😀 BONUS <span class="yellow-text">x ${multiplier}!</span>`;
   }
   if (message === "victory") {
-    $('.banner-text').innerHTML =
-      `${goalWord}!
-      <div class="cyan-text">🙂 Nice!</div>`;
+    $(".banner-text-top").innerHTML = "Nice! 🙂";
+  }
+  if(message === "skipped") {
+    $(".banner-text-top").innerHTML = "Skipped 😣";
   }
 }
 
@@ -229,7 +263,9 @@ function updateHUD() {
   $(".moves").innerText = moves;
   $(".score").innerText = score;
   $(".multiplier").innerText = multiplier;
-  if(movesItTook >= 1) { $('.banner-text').classList.add('hidden') }
+  if (movesItTook >= 1) {
+    $(".banner").classList.add("hidden");
+  }
 }
 
 function dealEm() {
@@ -237,6 +273,7 @@ function dealEm() {
   setGoalCharIndexes();
   setGridLetters();
   colorize();
+  isVictory = false;
 
   console.log(goalWord);
   console.log(
