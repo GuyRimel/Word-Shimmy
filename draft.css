@@ -105,3 +105,4 @@ h1 {
 .selected { border: 8px solid var(--selected); }
 
 .cyan-text { color: cyan }
+.yellow-text { color: #fcff82 }

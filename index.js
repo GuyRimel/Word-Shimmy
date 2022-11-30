@@ -10,6 +10,7 @@ let moveBonus = 9;
 let maxMoves = 20;
 let score = 0;
 let multiplier = 1;
+let bonusStreak = 0;
 let message = '';
 // each character of the goalWord gets a variable for it's grid index
 let goalChar0index,
@@ -171,20 +172,28 @@ function evaluate() {
 
   if (isVictory) {
     moves += moveBonus;
-    if (moves >= maxMoves) {
+    if (moves >= maxMoves && bonusStreak) {
       moves = maxMoves;
+      message = "bonus streak"
+      bonusStreak++;
+      multiplier += bonusStreak * 0.5;
+    }
+    else if (moves >= maxMoves) {
+      moves = maxMoves;
+      bonusStreak++;
       message = "bonus"
-      multiplier += 0.2;
+      multiplier += 0.5;
     } else {
       message = "victory"
       multiplier = 1;
+      bonusStreak = 0;
     }
-    say(message);
-    score += Math.round(500 / movesItTook) * multiplier;
+    score += Math.round(500 / movesItTook * multiplier);
     movesItTook = 0;
+
+    say(message);
     updateHUD();
     dealEm();
-    console.log('moves: ', moves, '\nscore: ', score)
   } else {
     moves--;
     movesItTook++;
@@ -199,13 +208,20 @@ function evaluate() {
 
 function say(message) {
   $('.banner-text').classList.remove('hidden');
-  if (message === "victory") {
-    $('.banner-text').innerHTML = goalWord + '! 😀';
+  if(message === "bonus streak") {
+    $('.banner-text').innerHTML =
+      `${goalWord}!
+        <div class="cyan-text">😆 BONUS STREAK ${bonusStreak}! <span class="yellow-text">x ${multiplier}!</span></div>`
   }
   else if(message === "bonus") {
     $('.banner-text').innerHTML =
-      `${goalWord}!!! 🤩
-        <div class="cyan-text">MOVE MAX-OUT! MULTIPLIER UP!</div>`
+      `${goalWord}!
+        <div class="cyan-text">😀 BONUS! <span class="yellow-text">x ${multiplier}!</span></div>`
+  }
+  if (message === "victory") {
+    $('.banner-text').innerHTML =
+      `${goalWord}!
+      <div class="cyan-text">🙂 Nice!</div>`;
   }
 }
 
