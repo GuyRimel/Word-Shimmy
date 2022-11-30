@@ -51,7 +51,7 @@ let goalChar0index,
 })();
 
 function guess() {
-  guessWord = prompt("The word is...", "").focus();
+  guessWord = prompt("The word is...", "");
   if(!guessWord) return;
   else if(guessWord.toUpperCase() === goalWord) {
     isVictory = true;
@@ -214,13 +214,13 @@ function evaluate() {
     if (moves >= maxMoves && bonusStreak) {
       moves = maxMoves;
       message = "bonus streak";
-      bonusStreak++;
-      multiplier += bonusStreak * 0.5;
+      bonusStreak += bonusStreak;
+      multiplier += 0.5 + bonusStreak;
     } else if (moves >= maxMoves) {
       moves = maxMoves;
       bonusStreak++;
       message = "bonus";
-      multiplier += 0.5;
+      multiplier++;
     } else {
       message = "victory";
       multiplier = 1;
