@@ -208,7 +208,7 @@ function say(message) {
       `${goalWord}!!!!!
         MOVE MAX-OUT BONUS!!! +100 POINTS 😱`
   }
-  setTimeout(()=>{$('.banner-text').classList.add('hidden')}, 4000);
+  setTimeout(()=>{$('.banner-text').classList.add('hidden')}, 3500);
 }
 
 function updateHUD() {
