@@ -51,7 +51,7 @@ let goalChar0index,
 })();
 
 function guess() {
-  guessWord = prompt("The word is...", "");
+  guessWord = prompt("The word is...", "").focus();
   if(!guessWord) return;
   else if(guessWord.toUpperCase() === goalWord) {
     isVictory = true;
