@@ -101,6 +101,7 @@ function setGridLetters() {
 
 function swap(target) {
   target.classList.toggle("selected");
+  navigator.vibrate(20);
   let selections = $$(".selected");
   if (selections.length >= 2) {
     let pointA = selections[0];

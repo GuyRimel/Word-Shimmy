@@ -3,8 +3,7 @@
   margin: 0;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   background: #066f2f;
-  --gridWidth: 90vw;
-  --cellWidth: calc(var(--gridWidth)/5);
+  --maxGridWidth: 90vw;
   --header-bg: #53bc7c;
   --header-text: #EBFFFF;
   --hud-color:#B9FFE2;
@@ -66,11 +65,12 @@ h1 {
 
 .grid {
   display: grid;
+  max-width: var(--maxGridWidth);
   gap: 3px 3px;
   grid-template-columns: 20% 20% 20% 20% 20%;
   justify-content: center;
   background: #444;
-  box-shadow: 15px 15px 15px #000c;
+  box-shadow: 0px 20px 20px #000c;
 }
 
 .grid-item {
