@@ -99,6 +99,7 @@ function setGridLetters() {
 let swap = () => {
   let selections = $$(".selected");
   if (selections.length === 2) {
+    navigator.vibrate(25);
     let pointA = selections[0];
     let pointB = selections[1];
     let pointAParent = pointA.parentElement;
@@ -110,6 +111,8 @@ let swap = () => {
     pointB.classList.remove("selected");
     colorize();
     evaluate();
+  } else {
+    navigator.vibrate(15);
   }
 };
 
