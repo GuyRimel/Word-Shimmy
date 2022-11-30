@@ -100,11 +100,10 @@ function setGridLetters() {
   });
 }
 
-let swap = () => {
+function swap() {
   let selections = $$(".selected");
-  console.log(selections);
+  alert(selections);
   if (selections.length >= 2) {
-    navigator.vibrate(20);
     let pointA = selections[0];
     let pointB = selections[1];
     let pointAParent = pointA.parentElement;
@@ -119,7 +118,7 @@ let swap = () => {
   }
 };
 
-let colorize = () => {
+function colorize() {
   document.querySelectorAll(".cell").forEach((cell) => {
     let gridx = parseInt(cell.parentElement.dataset.gridx);
     let gridy = parseInt(cell.parentElement.dataset.gridy);
@@ -158,7 +157,7 @@ let colorize = () => {
   });
 };
 
-let evaluate = () => {
+function evaluate() {
   let isVictory = false;
   for (i = 0; i < 5; i++) {
     let rowString = "";
