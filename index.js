@@ -31,8 +31,7 @@ let goalChar0index,
     $(".grid").appendChild(elContainer);
     el.classList.add("btn", "cell");
     el.addEventListener("click", (e) => {
-      e.target.classList.toggle("selected");
-      swap();
+      swap(e.target);
     });
   }
 })();
@@ -100,9 +99,9 @@ function setGridLetters() {
   });
 }
 
-function swap() {
+function swap(target) {
+  target.classList.toggle("selected");
   let selections = $$(".selected");
-  alert(selections);
   if (selections.length >= 2) {
     let pointA = selections[0];
     let pointB = selections[1];
