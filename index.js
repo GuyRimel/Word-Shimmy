@@ -28,12 +28,11 @@ let goalChar0index,
     elContainer.dataset.gridy = Math.floor(i / rowSize);
     elContainer.classList.add("grid-item");
     elContainer.appendChild(el);
-    $(".grid").appendChild(elContainer);
     el.classList.add("btn", "cell");
     el.addEventListener("click", (e) => {
-      e.target.classList.toggle("selected");
-      swap();
+      swap(e.target);
     });
+    $(".grid").appendChild(elContainer);
   }
 })();
 
@@ -100,7 +99,8 @@ function setGridLetters() {
   });
 }
 
-function swap() {
+function swap(target) {
+  target.classList.toggle("selected");
   let selections = $$(".selected");
   if (selections.length >= 2) {
     let pointA = selections[0];
