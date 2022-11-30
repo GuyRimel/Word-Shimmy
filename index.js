@@ -4,7 +4,7 @@ const $$ = (el) => document.querySelectorAll(el); // shorthand for querySelector
 // GLOBAL VARIABLES //////////
 let rowSize = 5;
 let goalWord;
-let moves = 10;
+let moves = 12;
 let movesItTook = 0;
 let moveBonus = 9;
 let maxMoves = 20;
