@@ -10,7 +10,6 @@ let moveBonus = 9;
 let maxMoves = 20;
 let score = 0;
 let multiplier = 1;
-let bonusStreak = 0;
 let message = "";
 let guessWord = "";
 let isVictory = false;
@@ -37,8 +36,8 @@ let goalChar0index,
     });
     $(".grid").appendChild(elContainer);
   }
-  let skipBtn = document.createElement('button');
-  let guessBtn = document.createElement('button');
+  let skipBtn = document.createElement('div');
+  let guessBtn = document.createElement('div');
   
   skipBtn.innerText = 'Skip';
   skipBtn.classList.add('btn', 'skip-btn');
@@ -55,11 +54,10 @@ function guess() {
   if(!guessWord) return;
   else if(guessWord.toUpperCase() === goalWord) {
     isVictory = true;
-    evaluate();
   } else {
     moves -= 2;
-    evaluate();
   }
+  evaluate();
   clearSelections();
 }
 
@@ -211,21 +209,19 @@ function evaluate() {
 
   if (isVictory) {
     moves += moveBonus;
-    if (moves >= maxMoves && bonusStreak) {
+    if (moves >= maxMoves && multiplier > 1) {
       moves = maxMoves;
       message = "bonus streak";
-      bonusStreak += bonusStreak;
-      multiplier += 0.5 + bonusStreak;
+      multiplier++;
     } else if (moves >= maxMoves) {
       moves = maxMoves;
-      bonusStreak++;
       message = "bonus";
       multiplier++;
     } else {
       message = "victory";
       multiplier = 1;
-      bonusStreak = 0;
     }
+    if(!movesItTook) movesItTook = 1;
     score += Math.round((500 / movesItTook) * multiplier);
     movesItTook = 0;
     updateHUD();
@@ -247,9 +243,9 @@ function say(message) {
   
   if (message === "bonus streak") {
     $(".banner-text-top").innerHTML =
-    `😆 BONUS STREAK ${bonusStreak}<span class="yellow-text">x ${multiplier}!</span>`;
+    `😆 BONUS STREEEAK<span class="yellow-text"> x ${multiplier}!</span>`;
   } else if (message === "bonus") {
-    $(".banner-text-top").innerHTML = `😀 BONUS <span class="yellow-text">x ${multiplier}!</span>`;
+    $(".banner-text-top").innerHTML = `😀 BONUS<span class="yellow-text"> x ${multiplier}!</span>`;
   }
   if (message === "victory") {
     $(".banner-text-top").innerHTML = "Nice! 🙂";
