@@ -124,7 +124,7 @@ h1 {
 }
 
 .hidden { visibility: hidden; }
-.dn { display: none; }
+.display-none { display: none; }
 
 /* order matters!!! */  
 .yellow { background: var(--yellow); border: 8px ridge var(--yellow)}
