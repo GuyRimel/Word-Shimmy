@@ -2,9 +2,7 @@
   box-sizing: border-box;
   margin: 0;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-  background: #066f2f;
   --maxGridWidth: 90vw;
-  --header-bg: #53bc7c;
   --header-text: #EBFFFF;
   --hud-color:#B9FFE2;
   --hud-text: #222;
@@ -16,27 +14,82 @@
   --selected: #f01;
 }
 
-h1 {
-  margin: 0;
-  color: var(--header-text);
-  text-align: center;
-  background: var(--header-bg);
-  padding: 0.4em;
-}
+.easy-bg { background: #066c6f; }
+.easy-hud { background: #85EBEE; }
+.normal-bg { background: #066f2f; }
+.normal-hud { background: #85EEAE; }
+.hard-bg { background: #6f064a; }
+.hard-hud { background: #EE85C9; }
 
-.game-view {
+h1 {color: #fff; }
+
+.game-view,
+.menu-view {
   height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+.menu-view {
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-view h2,
+.menu-view h3 {
+  color: #fff;
+  outline: 1px solid white;
+  padding: .4em;
+  box-shadow: 0 0.25em 0.25em #000c;
+  user-select: none;
+}
+
+.menu-view h2:hover,
+.menu-view h3:hover {
+  cursor: pointer;
+}
+
+.menu-view h2:active,
+.menu-view h3:active {
+  background: white;
+  color: #ccc;
+  transform: translateY(.25em);
+  box-shadow: 0 0 0.25em #000c;
+}
+
+.difficulty {
+  display: flex;
+  justify-content: space-between;
+}
+
+.difficulty * {
+  margin: 0;
+  display: flex;
+}
+
+.selected-btn {
+  background-color: #efefef;
+  color: #444 !important;
+}
+
+.very-top {
+  display: flex;
+  justify-content: space-between;
+  font-variant: small-caps;
+  color: #656565
+}
+
+.very-top * {
+  margin: 0;
+  padding: .35em;
 }
 
 .hud {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  background-color: var(--hud-color);
   color: var(--hud-text);
-  box-shadow: 15px 0px 15px #000c;
+  box-shadow: 0px 15px 15px #000c;
 }
 
 .hud h3, .hud h2 {
@@ -46,6 +99,8 @@ h1 {
   width: 100%;
   height: 100%;
   color: #333;
+  padding: .5em;
+  margin: 0;
 }
 
 .banner * {
@@ -93,7 +148,8 @@ h1 {
   font-size: 2.5em;
 }
 
-.btn:hover {
+.btn:hover,
+.very-top span:hover {
   cursor: pointer;
 }
 

@@ -5,15 +5,36 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="normalize.min.css">
-  <link rel="stylesheet" href="final.css">
+  <link rel="stylesheet" href="draft.css">
   <title>Word Shimmy</title>
 </head>
-<body>
-  <div class="menu-view display-none">
-    <h1>Word Shimmy!</h1>
+<body class="normal-bg">
+  <div class="menu-view">
+    <div>
+      <h1>Word Shimmy!</h1>
+      <h2 class="play-btn" onclick="startGame()">Play</h2>
+      <div class="difficulty">
+        <h3 class="easy-btn" onclick="setDifficulty('easy')">Easy</h3>
+        <h3 class="normal-btn selected-btn" onclick="setDifficulty('normal')">Normal</h3>
+        <h3 class="hard-btn" onclick="setDifficulty('hard')">Hard</h3>
+      </div>
+      <h2 onclick="highScores()">High Scores</h2>
+      <h2 onclick="rules()">Rules</h2>
+    </div>
   </div>
 
-  <div class="game-view">
+  <div class="game-view display-none">
+    <div class="very-top">
+      <div class="current-difficulty"></div>
+      <div>
+        Best:&nbsp;
+        <span class="current-high-score">0</span>
+      </div>
+      <div>
+        <span onclick="quit()">Quit</span>
+        <span onclick="rules()">Rules</span>
+      </div>
+    </div>
     <div class="hud">
       <h3>MOV <span class="moves">10</span></h3>
       <h2><span class="score">0</span></h2>
@@ -31,7 +52,8 @@
   </div>
   
   <!-- bottom scripts -->
+  <script src="config.js"></script>
   <script src="words.js"></script>
-  <script src="index.min.js"></script>
+  <script src="index.js"></script>
 </body>
 </html>

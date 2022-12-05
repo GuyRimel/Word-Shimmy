@@ -1,25 +1,3 @@
-const $ = (el) => document.querySelector(el); // shorthand for querySelector
-const $$ = (el) => document.querySelectorAll(el); // shorthand for querySelectorAll
-
-// GLOBAL VARIABLES //////////
-let rowSize = 5;
-let goalWord;
-let moves = 12;
-let movesItTook = 0;
-let moveBonus = 9;
-let maxMoves = 20;
-let score = 0;
-let multiplier = 1;
-let message = "";
-let guessWord = "";
-let isVictory = false;
-// each character of the goalWord gets a variable for it's grid index
-let goalChar0index,
-  goalChar1index,
-  goalChar2index,
-  goalChar3index,
-  goalChar4index;
-
 // UTILITY FUNCS //////////
 (function buildGrid() {
   for (i = 0; i < 25; i++) {
@@ -265,6 +243,7 @@ function updateHUD() {
 }
 
 function dealEm() {
+  updateHUD();
   setRandomGoalWord();
   setGoalCharIndexes();
   setGridLetters();
@@ -293,9 +272,21 @@ function gameOver() {
 }
 
 function startGame() {
-  moves = 10;
-  score = 0;
-  updateHUD();
+  $('.game-view').classList.remove('display-none');
+  $('.menu-view').classList.add('display-none');
+  resetVars();
   dealEm();
 }
-startGame();
+
+function quit() {
+  $('.game-view').classList.add('display-none');
+  $('.menu-view').classList.remove('display-none');
+}
+
+function rules() {
+  alert('there are no rules yet O_O !');
+}
+
+function highScores() {
+  alert('there are no high scores yet O_O !');
+}
