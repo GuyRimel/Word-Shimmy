@@ -40,7 +40,6 @@ function guess() {
 }
 
 function skip() {
-  moves -= 2;
   message = "skipped";
   evaluate();
   say(message);
@@ -213,6 +212,7 @@ function evaluate() {
       gameOver();
     }
   }
+  console.log('moves',moves,'maxmoves',maxMoves)
 }
 
 function say(message) {
@@ -274,7 +274,7 @@ function gameOver() {
 function startGame() {
   $('.game-view').classList.remove('display-none');
   $('.menu-view').classList.add('display-none');
-  resetVars();
+  reset();
   dealEm();
 }
 

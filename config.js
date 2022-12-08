@@ -34,29 +34,28 @@ function setDifficulty(string) {
     maxMoves = 15;
   }
   difficulty = string;
-
+  
   $('body').classList.remove('.easy-bg', 'normal-bg', 'hard-bg');
   $('body').classList.add(`${string}-bg`);
   $$('.difficulty h3').forEach(el => el.classList.remove('selected-btn'));
   $(`.${string}-btn`).classList.add('selected-btn');
-  $$('.game-view *').forEach(el => el.classList.remove('easy-hud', 'normal-hud', 'hard-hud'));
-  $('.very-top').classList.add(`${string}-hud`);
-  $('.hud').classList.add(`${string}-hud`);
+  $$('.game-view *').forEach(el => el.classList.remove('easy', 'normal', 'hard'));
+  $('.very-top').classList.add(string);
+  $('.hud').classList.add(string);
   string = string.charAt(0).toUpperCase() + string.slice(1);
   $('.current-difficulty').innerText = string;
 }
 
-function resetVars() {
+function reset() {
   goalWord = null;
   message = "";
   guessWord = "";
   moves = 10;
   movesItTook = 0;
-  moveBonus = 9;
-  maxMoves = 20;
   score = 0;
   multiplier = 1;
   isVictory = false;
+  $(".banner").classList.add("hidden");
   updateHUD();
 }
 

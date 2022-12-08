@@ -12,14 +12,23 @@
   --yellow: #FFCC03;
   --orange:#ed820e;
   --selected: #f01;
+  --e-dark: #00393C;
+  --e-medium: #066c6f;
+  --n-dark: #003C00;
+  --n-medium: #066f2f;
+  --h-dark: #3C0017;
+  --h-medium: #6f064a;
 }
 
-.easy-bg { background: #066c6f; }
-.easy-hud { background: #85EBEE; }
+.easy.very-top { background: var(--e-dark); color: var(--e-medium)}
+.easy.hud { background: var(--e-dark) }
+.easy-bg { background: var(--e-medium) }
+.normal.very-top { background: #003C00; }
+.normal.hud { background: #003C00; }
 .normal-bg { background: #066f2f; }
-.normal-hud { background: #85EEAE; }
+.hard.very-top { background: #3C0017; }
+.hard.hud { background: #3C0017; }
 .hard-bg { background: #6f064a; }
-.hard-hud { background: #EE85C9; }
 
 h1 {color: #fff; }
 
@@ -76,20 +85,19 @@ h1 {color: #fff; }
   display: flex;
   justify-content: space-between;
   font-variant: small-caps;
-  color: #656565
 }
 
 .very-top * {
   margin: 0;
-  padding: .35em;
+  padding: .35em .35em 0;
 }
 
 .hud {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  color: var(--hud-text);
-  box-shadow: 0px 15px 15px #000c;
+  box-shadow: 0px 15px 15px #0005;
+  color: #fcfcfc;
 }
 
 .hud h3, .hud h2 {
@@ -97,8 +105,6 @@ h1 {color: #fff; }
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100%;
-  color: #333;
   padding: .5em;
   margin: 0;
 }
@@ -120,7 +126,7 @@ h1 {color: #fff; }
 .grid {
   display: grid;
   max-width: var(--maxGridWidth);
-  gap: 3px 3px;
+  gap: 4px 3px;
   grid-template-columns: 20% 20% 20% 20% 20%;
   justify-content: center;
   background: #0005;
@@ -143,7 +149,7 @@ h1 {color: #fff; }
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   text-align: center;
   padding: 0.05em 0.15em;
-  transition: all 0.2s ease-out;
+  transition: all 25ms linear;
   font-weight: bold;
   font-size: 2.5em;
 }
@@ -154,7 +160,7 @@ h1 {color: #fff; }
 }
 
 .btn:active {
-  transform: translateY(2px);
+  transform: translateY(4px);
   background: var(--selected);
 }
 
@@ -183,9 +189,9 @@ h1 {color: #fff; }
 .display-none { display: none; }
 
 /* order matters!!! */  
-.yellow { background: var(--yellow); border: 8px ridge var(--yellow)}
-.green { background: var(--green); border: 8px ridge var(--green)}
-.selected { border: 8px solid var(--selected); }
+.yellow { background: var(--yellow); border: 7px ridge var(--yellow)}
+.green { background: var(--green); border: 7px ridge var(--green)}
+.selected { border: 7px solid var(--selected); }
 
 .cyan-text { color: cyan }
 .yellow-text { color: #fcff82 }
