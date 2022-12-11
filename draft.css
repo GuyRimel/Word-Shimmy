@@ -17,9 +17,9 @@
   --n-dark: hsla(140, 90%, 15%, 1);
   --n-medium: hsla(140, 90%, 25%, 1);
   --n-light: hsla(140, 45%, 50%, 1);
-  --h-dark: hsla(280, 90%, 15%, 1);
-  --h-medium: hsla(280, 90%, 25%, 1);
-  --h-light: hsla(280, 45%, 50%, 1);
+  --h-dark: hsla(220, 90%, 15%, 1);
+  --h-medium: hsla(220, 90%, 25%, 1);
+  --h-light: hsla(220, 45%, 50%, 1);
   --skip-btn: hsla(15, 80%, 60%);
   --burn-btn: hsla(35, 80%, 60%);
   --xup-btn: hsla(55, 80%, 60%);
@@ -181,6 +181,7 @@ h1 { color: #fff; }
   text-align: center;
   padding: .65em 0;
   border-radius: 3px;
+  color: #111;
 }
 
 .skip-btn {
@@ -198,16 +199,17 @@ h1 { color: #fff; }
 .guess-btn {
   background: var(--guess-btn);
   grid-column: 4/6;
-}
+} 
 
+.btn.disabled { pointer-events: none; background-color: #aaa;}
 .hidden { visibility: hidden; }
 .display-none { display: none; }
 
 /* order matters!!! */  
 .burn { background: var(--burn) !important; border: 7px ridge var(--burn); color: #888}
-.orange { background: var(--orange) !important; border: 7px ridge var(--orange)}
-.yellow { background: var(--yellow) !important; border: 7px ridge var(--yellow)}
-.green { background: var(--green) !important; border: 7px ridge var(--green)}
+.orange { background: var(--orange) !important; border: 7px ridge var(--orange); color: #222; }
+.yellow { background: var(--yellow) !important; border: 7px ridge var(--yellow); color: #222; }
+.green { background: var(--green) !important; border: 7px ridge var(--green); color: #222;}
 .selected { border: 7px solid var(--selected); }
 
 .cyan-text { color: cyan }

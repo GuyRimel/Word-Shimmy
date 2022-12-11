@@ -19,14 +19,14 @@
   let xupBtn = document.createElement('button');
   let guessBtn = document.createElement('button');
   
-  skipBtn.innerText = 'Skip\n-1M';
+  skipBtn.innerText = 'Skip';
   skipBtn.classList.add('btn', 'skip-btn');
   skipBtn.addEventListener('click', skip);
-  burnBtn.innerText = 'Burn\n-3M';
+  burnBtn.innerText = 'Burn';
   burnBtn.classList.add('btn', 'burn-btn');
   burnBtn.addEventListener('click', burn);
-  xupBtn.innerText = 'X-Up\n-5M';
-  xupBtn.classList.add('btn', 'xup-btn');
+  xupBtn.innerText = 'X-Up';
+  xupBtn.classList.add('btn', 'xup-btn', 'disabled');
   xupBtn.addEventListener('click', xup);
   guessBtn.innerText = 'Guess';
   guessBtn.classList.add('btn', 'guess-btn');
@@ -46,16 +46,20 @@ function skip() {
 }
 
 function burn() {
+  $('.burn-btn').classList.add('disabled');
   $$('.cell').forEach(cell => {
     cell.classList.add('burn');
   });
   message = 'burn';
   colorize();
-  evaluate();
+  moves -= 5;
+  updateHUD();
 }
 
 function xup() {
-
+  $('.xup-btn').classList.add('disabled');
+  multiplier += 3;
+  updateHUD();
 }
 
 function guess() {
@@ -63,8 +67,6 @@ function guess() {
   if(!guessWord) return;
   else if(guessWord.toUpperCase() === goalWord) {
     isVictory = true;
-  } else {
-    moves -= 2;
   }
   evaluate();
   clearSelections();
@@ -208,37 +210,34 @@ function evaluate() {
     }
   }
 
+  
   if (isVictory) {
+    streak++;
+    console.log(streak, (streak % 3));
+    if(streak % 2 === 0) $('.burn-btn').classList.remove('disabled');
+    if(streak % 3 === 0) $('.xup-btn').classList.remove('disabled');
     moves += moveBonus;
-    if (moves >= maxMoves && multiplier > 1) {
+    if (moves >= maxMoves) {
       moves = maxMoves;
-      message = "bonus streak";
-      multiplier++;
-    } else if (moves >= maxMoves) {
-      moves = maxMoves;
-      message = "bonus";
+      message = "max moves";
       multiplier++;
     } else {
       message = "victory";
-      multiplier = 1;
     }
-    if(!movesItTook) movesItTook = 1;
-    score += Math.round((500 / movesItTook) * multiplier);
-    movesItTook = 0;
-    updateHUD();
     say(message);
     dealEm();
+    roundScore = Math.round((500 / movesItTook) * multiplier);
+    score += roundScore;
+    movesItTook = 1;
   } else {
-    if(message = 'burn') moves = moves - 3;
-    else if(message = 'xup') moves = moves - 5;
-    else moves--;
+    moves--;
     movesItTook++;
-    updateHUD();
+    roundScore = Math.round((500 / movesItTook) * multiplier);
     if (moves < 1) {
       gameOver();
     }
   }
-  console.log('moves',moves,'maxmoves',maxMoves)
+  updateHUD();
 }
 
 function say(message) {
@@ -262,6 +261,7 @@ function say(message) {
 function updateHUD() {
   $(".moves").innerText = moves;
   $(".score").innerText = score;
+  $(".round-score").innerText = roundScore;
   $(".multiplier").innerText = multiplier;
   if (movesItTook >= 1) {
     $(".banner").classList.add("hidden");

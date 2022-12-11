@@ -7,11 +7,13 @@ let goalWord;
 let message = "";
 let guessWord = "";
 let moves = 10;
-let movesItTook = 0;
+let movesItTook = 1;
 let moveBonus = 9;
 let maxMoves = 20;
 let score = 0;
+let roundScore = 500;
 let multiplier = 1;
+let streak = 0;
 let difficulty = null;
 let isVictory = false;
 // each character of the goalWord gets a variable for it's grid index
@@ -54,11 +56,12 @@ function reset() {
   message = "";
   guessWord = "";
   moves = 10;
-  movesItTook = 0;
+  movesItTook = 1;
   score = 0;
+  roundScore = 500;
   multiplier = 1;
+  streak = 0;
   isVictory = false;
   $(".banner").classList.add("hidden");
   updateHUD();
 }
-
