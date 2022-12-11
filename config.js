@@ -34,16 +34,19 @@ function setDifficulty(string) {
     maxMoves = 15;
   }
   difficulty = string;
-  
-  $('body').classList.remove('.easy-bg', 'normal-bg', 'hard-bg');
-  $('body').classList.add(`${string}-bg`);
-  $$('.difficulty h3').forEach(el => el.classList.remove('selected-btn'));
-  $(`.${string}-btn`).classList.add('selected-btn');
-  $$('.game-view *').forEach(el => el.classList.remove('easy', 'normal', 'hard'));
-  $('.very-top').classList.add(string);
-  $('.hud').classList.add(string);
   string = string.charAt(0).toUpperCase() + string.slice(1);
   $('.current-difficulty').innerText = string;
+  setColors();
+}
+
+function setColors() {
+  $('body').classList.remove('.easy-bg', 'normal-bg', 'hard-bg');
+  $('body').classList.add(`${difficulty}-bg`);
+  $$('.difficulty h3').forEach(el => el.classList.remove('selected-btn'));
+  $(`.${difficulty}-btn`).classList.add('selected-btn');
+  $$('.game-view *').forEach(el => el.classList.remove('easy', 'normal', 'hard'));
+  $('.very-top').classList.add(difficulty);
+  $('.hud').classList.add(difficulty);
 }
 
 function reset() {

@@ -8,24 +8,55 @@
     elContainer.dataset.gridy = Math.floor(i / rowSize);
     elContainer.classList.add("grid-item");
     elContainer.appendChild(el);
-    el.classList.add("btn", "cell");
+    el.classList.add("cell");
     el.addEventListener("click", (e) => {
       swap(e.target);
     });
     $(".grid").appendChild(elContainer);
   }
-  let skipBtn = document.createElement('div');
-  let guessBtn = document.createElement('div');
+  let skipBtn = document.createElement('button');
+  let burnBtn = document.createElement('button');
+  let xupBtn = document.createElement('button');
+  let guessBtn = document.createElement('button');
   
-  skipBtn.innerText = 'Skip';
+  skipBtn.innerText = 'Skip\n-1M';
   skipBtn.classList.add('btn', 'skip-btn');
   skipBtn.addEventListener('click', skip);
+  burnBtn.innerText = 'Burn\n-3M';
+  burnBtn.classList.add('btn', 'burn-btn');
+  burnBtn.addEventListener('click', burn);
+  xupBtn.innerText = 'X-Up\n-5M';
+  xupBtn.classList.add('btn', 'xup-btn');
+  xupBtn.addEventListener('click', xup);
   guessBtn.innerText = 'Guess';
   guessBtn.classList.add('btn', 'guess-btn');
   guessBtn.addEventListener('click', guess);
   $(".grid").appendChild(skipBtn);
+  $(".grid").appendChild(burnBtn);
+  $(".grid").appendChild(xupBtn);
   $(".grid").appendChild(guessBtn);
 })();
+
+function skip() {
+  message = "skipped";
+  say(message);
+  evaluate();
+  dealEm();
+  clearSelections();
+}
+
+function burn() {
+  $$('.cell').forEach(cell => {
+    cell.classList.add('burn');
+  });
+  message = 'burn';
+  colorize();
+  evaluate();
+}
+
+function xup() {
+
+}
 
 function guess() {
   guessWord = prompt("The word is...", "");
@@ -36,14 +67,6 @@ function guess() {
     moves -= 2;
   }
   evaluate();
-  clearSelections();
-}
-
-function skip() {
-  message = "skipped";
-  evaluate();
-  say(message);
-  dealEm();
   clearSelections();
 }
 
@@ -152,8 +175,9 @@ function colorize() {
       cellLeftLetter = cellLeft.innerText;
     }
 
-    cell.classList.remove("green", "yellow");
+    cell.classList.remove("green", "yellow", "orange");
 
+    if(message == 'burn' && goalWord.indexOf(cellLetter) !== -1) cell.classList.add('orange');
     if (
       (cellLeftLetter === letter0 && cellLetter === letter1) ||
       (cellLeftLetter === letter1 && cellLetter === letter2) ||
@@ -205,7 +229,9 @@ function evaluate() {
     say(message);
     dealEm();
   } else {
-    moves--;
+    if(message = 'burn') moves = moves - 3;
+    else if(message = 'xup') moves = moves - 5;
+    else moves--;
     movesItTook++;
     updateHUD();
     if (moves < 1) {
@@ -242,11 +268,16 @@ function updateHUD() {
   }
 }
 
+function removeBurns() {
+  $$('.cell').forEach(cell => cell.classList.remove('burn'))
+}
+
 function dealEm() {
   updateHUD();
   setRandomGoalWord();
   setGoalCharIndexes();
   setGridLetters();
+  removeBurns();
   colorize();
   isVictory = false;
 
@@ -274,6 +305,7 @@ function gameOver() {
 function startGame() {
   $('.game-view').classList.remove('display-none');
   $('.menu-view').classList.add('display-none');
+  setDifficulty(difficulty);
   reset();
   dealEm();
 }
