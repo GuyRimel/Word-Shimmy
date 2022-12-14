@@ -179,7 +179,10 @@ function colorize() {
 
     cell.classList.remove("green", "yellow", "orange");
 
-    if(message == 'burn' && goalWord.indexOf(cellLetter) !== -1) cell.classList.add('orange');
+    if(message == 'burn' && goalWord.indexOf(cellLetter) !== -1) {
+      cell.classList.add('orange');
+      say('burn');
+    }
     if (
       (cellLeftLetter === letter0 && cellLetter === letter1) ||
       (cellLeftLetter === letter1 && cellLetter === letter2) ||
@@ -210,52 +213,56 @@ function evaluate() {
     }
   }
 
+  roundScore = Math.round((500 / movesItTook) * multiplier);
   
-  if (isVictory) {
+  if (isVictory) { // if the player gets the goalword //////////
+    score += roundScore;
+    moves += moveBonus;
+    movesItTook = 1;
     streak++;
-    console.log(streak, (streak % 3));
+
     if(streak % 2 === 0) $('.burn-btn').classList.remove('disabled');
     if(streak % 3 === 0) $('.xup-btn').classList.remove('disabled');
-    moves += moveBonus;
     if (moves >= maxMoves) {
       moves = maxMoves;
-      message = "max moves";
       multiplier++;
+      message = "multiplier up";
     } else {
       message = "victory";
     }
+    updateHS(score);
     say(message);
     dealEm();
-    roundScore = Math.round((500 / movesItTook) * multiplier);
-    score += roundScore;
-    movesItTook = 1;
-  } else {
+  } else { // if the player doesn't get the goalword //////////
     moves--;
     movesItTook++;
-    roundScore = Math.round((500 / movesItTook) * multiplier);
-    if (moves < 1) {
-      gameOver();
-    }
+    if (moves < 1) { gameOver(); }
   }
   updateHUD();
 }
 
 function say(message) {
   $(".banner").classList.remove("hidden");
-  $(".banner-text-bottom").innerText = `* ${goalWord} *`;
-  
-  if (message === "bonus streak") {
-    $(".banner-text-top").innerHTML =
-    `😆 BONUS STREEEAK<span class="yellow-text"> x ${multiplier}!</span>`;
-  } else if (message === "bonus") {
-    $(".banner-text-top").innerHTML = `😀 BONUS<span class="yellow-text"> x ${multiplier}!</span>`;
+  let topText = '';
+  let bottomText = '';
+  if (message === "multiplier up") {
+    topText = `😀 Multiplier UP!<span class="yellow-text"> x ${multiplier}!</span>`;
+    bottomText = `* ${goalWord} *`;
   }
-  if (message === "victory") {
-    $(".banner-text-top").innerHTML = "Nice! 🙂";
+  else if (message === "victory") {
+    topText = "Nice! 🙂";
+    bottomText = `* ${goalWord} *`;
   }
-  if(message === "skipped") {
-    $(".banner-text-top").innerHTML = "Skipped 😣";
+  else if(message === "skipped") {
+    topText = "Skipped 😣";
+    bottomText = `it was * ${goalWord} *`;
   }
+  else if(message === 'burn') {
+    topText = "B U R N ! ! ! 💀"
+    bottomText = "🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥"
+  }
+  $('.banner-text-top').innerHTML = topText;
+  $(".banner-text-bottom").innerHTML = bottomText;
 }
 
 function updateHUD() {
@@ -263,9 +270,6 @@ function updateHUD() {
   $(".score").innerText = score;
   $(".round-score").innerText = roundScore;
   $(".multiplier").innerText = multiplier;
-  if (movesItTook >= 1) {
-    $(".banner").classList.add("hidden");
-  }
 }
 
 function removeBurns() {
@@ -319,6 +323,11 @@ function rules() {
   alert('there are no rules yet O_O !');
 }
 
-function highScores() {
+function viewHighScores() {
   alert('there are no high scores yet O_O !');
+}
+
+function updateHS(score) {
+  highScores[difficulty].push(score);
+  localStorage.setItem('highScores', highScores);
 }

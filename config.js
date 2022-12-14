@@ -65,3 +65,9 @@ function reset() {
   $(".banner").classList.add("hidden");
   updateHUD();
 }
+
+let highScores = {
+  easy: [],
+  normal: [1500, 133],
+  hard: []
+}
