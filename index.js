@@ -328,6 +328,10 @@ function viewHighScores() {
 }
 
 function updateHS(score) {
-  highScores[difficulty].push(score);
-  localStorage.setItem('highScores', highScores);
+  console.log(wordShimmyData);
+  let scoresToCompare = wordShimmyData.highScores[difficulty].push(score);
+  let sortBigToSmall = (a, b) => b - a;
+  scoresToCompare.sort(sortBigToSmall).pop();
+  wordShimmyData.highScores[difficulty] = scoresToCompare;
+  console.log(wordShimmyData.highScores);
 }

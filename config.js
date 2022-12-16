@@ -66,8 +66,15 @@ function reset() {
   updateHUD();
 }
 
-let highScores = {
-  easy: [],
-  normal: [1500, 133],
-  hard: []
+let wordShimmyData;
+if(localStorage.getItem(wordShimmyData)) {
+} else {
+  wordShimmyData = {
+    highScores: {
+      easy: [0, 0, 0],
+      normal: [0, 0, 0 ],
+      hard: [0, 0, 0]
+    }
+  }
 }
+localStorage.setItem('wordShimmyData', JSON.stringify(wordShimmyData));
