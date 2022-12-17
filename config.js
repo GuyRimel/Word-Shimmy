@@ -16,6 +16,8 @@ let multiplier = 1;
 let streak = 0;
 let difficulty = null;
 let isVictory = false;
+let burnCost = 5;
+let xupCost = 5;
 // each character of the goalWord gets a variable for it's grid index
 let goalChar0index,
   goalChar1index,
@@ -31,31 +33,33 @@ function setDifficulty(string) {
     moveBonus = 7;
     maxMoves = 10;
   } else {
-    string = 'normal';
+    string = "normal";
     moveBonus = 8;
     maxMoves = 15;
   }
   difficulty = string;
   string = string.charAt(0).toUpperCase() + string.slice(1);
-  $('.current-difficulty').innerText = string;
+  $(".current-difficulty").innerText = string;
   setColors();
 }
 
 function setColors() {
-  $('body').classList.remove('.easy-bg', 'normal-bg', 'hard-bg');
-  $('body').classList.add(`${difficulty}-bg`);
-  $$('.difficulty h3').forEach(el => el.classList.remove('selected-btn'));
-  $(`.${difficulty}-btn`).classList.add('selected-btn');
-  $$('.game-view *').forEach(el => el.classList.remove('easy', 'normal', 'hard'));
-  $('.very-top').classList.add(difficulty);
-  $('.hud').classList.add(difficulty);
+  $("body").classList.remove(".easy-bg", "normal-bg", "hard-bg");
+  $("body").classList.add(`${difficulty}-bg`);
+  $$(".difficulty h3").forEach((el) => el.classList.remove("selected-btn"));
+  $(`.${difficulty}-btn`).classList.add("selected-btn");
+  $$(".game-view *").forEach((el) =>
+    el.classList.remove("easy", "normal", "hard")
+  );
+  $(".very-top").classList.add(difficulty);
+  $(".hud").classList.add(difficulty);
 }
 
 function reset() {
   goalWord = null;
   message = "";
   guessWord = "";
-  moves = 10;
+  moves = maxMoves;
   movesItTook = 1;
   score = 0;
   roundScore = 500;
@@ -66,15 +70,15 @@ function reset() {
   updateHUD();
 }
 
-let wordShimmyData;
-if(localStorage.getItem(wordShimmyData)) {
-} else {
-  wordShimmyData = {
-    highScores: {
-      easy: [0, 0, 0],
-      normal: [0, 0, 0 ],
-      hard: [0, 0, 0]
-    }
+function setLocalData() {
+  if (!localStorage.getItem('wordShimmyData')) {
+    let wordShimmyData = JSON.stringify({
+      highScores: {
+        easy: 0,
+        normal: 0,
+        hard: 0
+      },
+    });
+    localStorage.setItem("wordShimmyData", wordShimmyData);
   }
 }
-localStorage.setItem('wordShimmyData', JSON.stringify(wordShimmyData));

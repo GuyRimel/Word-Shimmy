@@ -14,23 +14,23 @@
     });
     $(".grid").appendChild(elContainer);
   }
-  let skipBtn = document.createElement('button');
-  let burnBtn = document.createElement('button');
-  let xupBtn = document.createElement('button');
-  let guessBtn = document.createElement('button');
-  
-  skipBtn.innerText = 'Skip';
-  skipBtn.classList.add('btn', 'skip-btn');
-  skipBtn.addEventListener('click', skip);
-  burnBtn.innerText = 'Burn';
-  burnBtn.classList.add('btn', 'burn-btn');
-  burnBtn.addEventListener('click', burn);
-  xupBtn.innerText = 'X-Up';
-  xupBtn.classList.add('btn', 'xup-btn', 'disabled');
-  xupBtn.addEventListener('click', xup);
-  guessBtn.innerText = 'Guess';
-  guessBtn.classList.add('btn', 'guess-btn');
-  guessBtn.addEventListener('click', guess);
+  let skipBtn = document.createElement("button");
+  let burnBtn = document.createElement("button");
+  let xupBtn = document.createElement("button");
+  let guessBtn = document.createElement("button");
+
+  skipBtn.innerText = "Skip";
+  skipBtn.classList.add("btn", "skip-btn");
+  skipBtn.addEventListener("click", skip);
+  burnBtn.innerText = "Burn";
+  burnBtn.classList.add("btn", "burn-btn");
+  burnBtn.addEventListener("click", burn);
+  xupBtn.innerText = "X-Up";
+  xupBtn.classList.add("btn", "xup-btn");
+  xupBtn.addEventListener("click", xup);
+  guessBtn.innerText = "Guess";
+  guessBtn.classList.add("btn", "guess-btn");
+  guessBtn.addEventListener("click", guess);
   $(".grid").appendChild(skipBtn);
   $(".grid").appendChild(burnBtn);
   $(".grid").appendChild(xupBtn);
@@ -46,26 +46,27 @@ function skip() {
 }
 
 function burn() {
-  $('.burn-btn').classList.add('disabled');
-  $$('.cell').forEach(cell => {
-    cell.classList.add('burn');
+  $(".burn-btn").classList.add("disabled");
+  $$(".cell").forEach((cell) => {
+    cell.classList.add("burn");
   });
-  message = 'burn';
+  message = "burn";
   colorize();
-  moves -= 5;
+  moves -= burnCost;
   updateHUD();
 }
 
 function xup() {
-  $('.xup-btn').classList.add('disabled');
-  multiplier += 3;
+  $(".xup-btn").classList.add("disabled");
+  multiplier++;
+  moves -= xupCost;
   updateHUD();
 }
 
 function guess() {
   guessWord = prompt("The word is...", "");
-  if(!guessWord) return;
-  else if(guessWord.toUpperCase() === goalWord) {
+  if (!guessWord) return;
+  else if (guessWord.toUpperCase() === goalWord) {
     isVictory = true;
   }
   evaluate();
@@ -74,7 +75,7 @@ function guess() {
 
 function clearSelections() {
   let selections = $$(".selected");
-  selections.forEach((selection)=> selection.classList.remove('selected'));
+  selections.forEach((selection) => selection.classList.remove("selected"));
 }
 
 function getRandomLetter() {
@@ -179,9 +180,9 @@ function colorize() {
 
     cell.classList.remove("green", "yellow", "orange");
 
-    if(message == 'burn' && goalWord.indexOf(cellLetter) !== -1) {
-      cell.classList.add('orange');
-      say('burn');
+    if (message == "burn" && goalWord.indexOf(cellLetter) !== -1) {
+      cell.classList.add("orange");
+      say("burn");
     }
     if (
       (cellLeftLetter === letter0 && cellLetter === letter1) ||
@@ -213,16 +214,15 @@ function evaluate() {
     }
   }
 
-  roundScore = Math.round((500 / movesItTook) * multiplier);
-  
-  if (isVictory) { // if the player gets the goalword //////////
-    score += roundScore;
+  if (isVictory) {
+    // if the player gets the goalword //////////
+    score += roundScore * multiplier;
     moves += moveBonus;
     movesItTook = 1;
     streak++;
 
-    if(streak % 2 === 0) $('.burn-btn').classList.remove('disabled');
-    if(streak % 3 === 0) $('.xup-btn').classList.remove('disabled');
+    if (moves - burnCost > 0) $(".burn-btn").classList.remove("disabled");
+    if (moves - xupCost > 0) $(".xup-btn").classList.remove("disabled");
     if (moves >= maxMoves) {
       moves = maxMoves;
       multiplier++;
@@ -233,39 +233,41 @@ function evaluate() {
     updateHS(score);
     say(message);
     dealEm();
-  } else { // if the player doesn't get the goalword //////////
-    moves--;
+  } else {
     movesItTook++;
-    if (moves < 1) { gameOver(); }
+    moves--;
+    roundScore -= Math.round(500 / maxMoves);
+    // if the player doesn't get the goalword //////////
+    if (moves < 1) {
+      gameOver();
+    }
   }
   updateHUD();
 }
 
 function say(message) {
   $(".banner").classList.remove("hidden");
-  let topText = '';
-  let bottomText = '';
+  let topText = "";
+  let bottomText = "";
   if (message === "multiplier up") {
     topText = `😀 Multiplier UP!<span class="yellow-text"> x ${multiplier}!</span>`;
     bottomText = `* ${goalWord} *`;
-  }
-  else if (message === "victory") {
+  } else if (message === "victory") {
     topText = "Nice! 🙂";
     bottomText = `* ${goalWord} *`;
-  }
-  else if(message === "skipped") {
+  } else if (message === "skipped") {
     topText = "Skipped 😣";
     bottomText = `it was * ${goalWord} *`;
+  } else if (message === "burn") {
+    topText = "B U R N ! ! ! 💀";
+    bottomText = "🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥";
   }
-  else if(message === 'burn') {
-    topText = "B U R N ! ! ! 💀"
-    bottomText = "🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥"
-  }
-  $('.banner-text-top').innerHTML = topText;
+  $(".banner-text-top").innerHTML = topText;
   $(".banner-text-bottom").innerHTML = bottomText;
 }
 
 function updateHUD() {
+  updateHS();
   $(".moves").innerText = moves;
   $(".score").innerText = score;
   $(".round-score").innerText = roundScore;
@@ -273,17 +275,18 @@ function updateHUD() {
 }
 
 function removeBurns() {
-  $$('.cell').forEach(cell => cell.classList.remove('burn'))
+  $$(".cell").forEach((cell) => cell.classList.remove("burn"));
 }
 
 function dealEm() {
-  updateHUD();
+  isVictory = false;
+  movesItTook = 1;
+  roundScore = 500;
   setRandomGoalWord();
   setGoalCharIndexes();
   setGridLetters();
   removeBurns();
   colorize();
-  isVictory = false;
 
   console.log(goalWord);
   console.log(
@@ -304,34 +307,38 @@ function gameOver() {
     Play Again?`
   );
   if (response) startGame();
+  else quit();
 }
 
 function startGame() {
-  $('.game-view').classList.remove('display-none');
-  $('.menu-view').classList.add('display-none');
+  setLocalData();
+  $(".game-view").classList.remove("display-none");
+  $(".menu-view").classList.add("display-none");
   setDifficulty(difficulty);
   reset();
   dealEm();
+  updateHUD();
 }
 
 function quit() {
-  $('.game-view').classList.add('display-none');
-  $('.menu-view').classList.remove('display-none');
+  $(".game-view").classList.add("display-none");
+  $(".menu-view").classList.remove("display-none");
 }
 
 function rules() {
-  alert('there are no rules yet O_O !');
+  alert("there are no rules yet O_O !");
 }
 
 function viewHighScores() {
-  alert('there are no high scores yet O_O !');
+  alert("there are no high scores yet O_O !");
 }
 
 function updateHS(score) {
-  console.log(wordShimmyData);
-  let scoresToCompare = wordShimmyData.highScores[difficulty].push(score);
-  let sortBigToSmall = (a, b) => b - a;
-  scoresToCompare.sort(sortBigToSmall).pop();
-  wordShimmyData.highScores[difficulty] = scoresToCompare;
-  console.log(wordShimmyData.highScores);
+  wordShimmyData = JSON.parse(localStorage.getItem("wordShimmyData"));
+  let currentHS = wordShimmyData.highScores[difficulty];
+  if (score > currentHS) {
+    wordShimmyData.highScores[difficulty] = score;
+  }
+  $('.current-high-score').innerText = wordShimmyData.highScores[difficulty];
+  localStorage.setItem("wordShimmyData", JSON.stringify(wordShimmyData));
 }
