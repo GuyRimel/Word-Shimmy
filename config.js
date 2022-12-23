@@ -22,7 +22,7 @@ let difficulty = null;
 let isVictory = false;
 let hintsGiven = 0;
 let burnCost = 5;
-let hintCost = 5;
+let hintCost = 2;
 // each character of the goalWord gets a variable for it's grid index
 let goalChar0index,
   goalChar1index,
