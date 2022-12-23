@@ -4,7 +4,11 @@ const $$ = (el) => document.querySelectorAll(el); // shorthand for querySelector
 // GLOBAL VARIABLES //////////
 let rowSize = 5;
 let goalWord;
-let message = "";
+let letter0;
+let letter1;
+let letter2;
+let letter3;
+let letter4;
 let guessWord = "";
 let moves = 10;
 let movesItTook = 1;
@@ -16,8 +20,9 @@ let multiplier = 1;
 let streak = 0;
 let difficulty = null;
 let isVictory = false;
+let hintsGiven = 0;
 let burnCost = 5;
-let xupCost = 5;
+let hintCost = 5;
 // each character of the goalWord gets a variable for it's grid index
 let goalChar0index,
   goalChar1index,
@@ -57,7 +62,6 @@ function setColors() {
 
 function reset() {
   goalWord = null;
-  message = "";
   guessWord = "";
   moves = maxMoves;
   movesItTook = 1;
@@ -66,19 +70,7 @@ function reset() {
   multiplier = 1;
   streak = 0;
   isVictory = false;
+  hintsGiven = 0;
   $(".banner").classList.add("hidden");
   updateHUD();
-}
-
-function setLocalData() {
-  if (!localStorage.getItem('wordShimmyData')) {
-    let wordShimmyData = JSON.stringify({
-      highScores: {
-        easy: 0,
-        normal: 0,
-        hard: 0
-      },
-    });
-    localStorage.setItem("wordShimmyData", wordShimmyData);
-  }
 }

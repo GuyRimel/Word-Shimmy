@@ -1,9 +1,9 @@
 // UTILITY FUNCS //////////
-(function buildGrid() {
+(function startup() {
   for (i = 0; i < 25; i++) {
     let elContainer = document.createElement("div");
     let el = document.createElement("button");
-    // the gridx position of an element is the remainder of i / 5
+    // the gridx position of an element is the remainder of i / 5 because there are 5 per row
     elContainer.dataset.gridx = i % rowSize;
     elContainer.dataset.gridy = Math.floor(i / rowSize);
     elContainer.classList.add("grid-item");
@@ -16,7 +16,7 @@
   }
   let skipBtn = document.createElement("button");
   let burnBtn = document.createElement("button");
-  let xupBtn = document.createElement("button");
+  let hintBtn = document.createElement("button");
   let guessBtn = document.createElement("button");
 
   skipBtn.innerText = "Skip";
@@ -25,21 +25,36 @@
   burnBtn.innerText = "Burn";
   burnBtn.classList.add("btn", "burn-btn");
   burnBtn.addEventListener("click", burn);
-  xupBtn.innerText = "X-Up";
-  xupBtn.classList.add("btn", "xup-btn");
-  xupBtn.addEventListener("click", xup);
+  hintBtn.innerText = "Hint";
+  hintBtn.classList.add("btn", "hint-btn");
+  hintBtn.addEventListener("click", hint);
   guessBtn.innerText = "Guess";
   guessBtn.classList.add("btn", "guess-btn");
   guessBtn.addEventListener("click", guess);
   $(".grid").appendChild(skipBtn);
   $(".grid").appendChild(burnBtn);
-  $(".grid").appendChild(xupBtn);
+  $(".grid").appendChild(hintBtn);
   $(".grid").appendChild(guessBtn);
+
+  
+  (function setLocalData() {
+    if (!localStorage.getItem('wordShimmyData')) {
+      let wordShimmyData = JSON.stringify({
+        highScores: {
+          easy: 0,
+          normal: 0,
+          hard: 0
+        },
+      });
+      localStorage.setItem("wordShimmyData", wordShimmyData);
+    }
+  })();
+
+  updateHS();
 })();
 
 function skip() {
-  message = "skipped";
-  say(message);
+  say("skipped");
   evaluate();
   dealEm();
   clearSelections();
@@ -47,19 +62,17 @@ function skip() {
 
 function burn() {
   $(".burn-btn").classList.add("disabled");
-  $$(".cell").forEach((cell) => {
-    cell.classList.add("burn");
-  });
-  message = "burn";
-  colorize();
+  say('burn');
+  colorize("burn");
   moves -= burnCost;
   updateHUD();
 }
 
-function xup() {
-  $(".xup-btn").classList.add("disabled");
-  multiplier++;
-  moves -= xupCost;
+function hint() {
+  $(".hint-btn").classList.add("disabled");
+  say('hint');
+  colorize('hint');
+  moves -= hintCost;
   updateHUD();
 }
 
@@ -84,16 +97,25 @@ function getRandomLetter() {
 }
 
 function getRandomGridIndex() {
+  // the "grid index" is the position of the cell. "0" is the first cell (top left)
+  // the grid is 5 x 5, so there are 25 indexes possible
   return Math.floor(Math.random() * Math.pow(rowSize, 2));
 }
 
 function setRandomGoalWord() {
   let goalWordIndex = Math.floor(Math.random() * words.length);
   goalWord = words[goalWordIndex].toUpperCase();
+  letter0 = goalWord.charAt(0);
+  letter1 = goalWord.charAt(1);
+  letter2 = goalWord.charAt(2);
+  letter3 = goalWord.charAt(3);
+  letter4 = goalWord.charAt(4);
 }
 
-// this painfully ensures that each position is unique -_-
+// this *painfully ensures that each position is unique -_-
 function setGoalCharIndexes() {
+  // "goalChar#indexes" are declared in "config.js"
+  // one variable for each letter of the goalWord
   goalChar0index = getRandomGridIndex();
   while (!goalChar1index || goalChar1index === goalChar0index)
     goalChar1index = getRandomGridIndex();
@@ -154,36 +176,36 @@ function swap(target) {
     pointBParent.appendChild(pointA);
     pointA.classList.remove("selected");
     pointB.classList.remove("selected");
+    hush();
     colorize();
     evaluate();
   }
 }
 
-function colorize() {
+function colorize(mod) {
   document.querySelectorAll(".cell").forEach((cell) => {
     let gridx = parseInt(cell.parentElement.dataset.gridx);
     let gridy = parseInt(cell.parentElement.dataset.gridy);
     let cellLetter = cell.innerText;
-    let letter0 = goalWord.charAt(0);
-    let letter1 = goalWord.charAt(1);
-    let letter2 = goalWord.charAt(2);
-    let letter3 = goalWord.charAt(3);
-    let letter4 = goalWord.charAt(4);
     let cellLeft, cellLeftLetter;
 
-    if (gridx === 0) {
-      cellLeftLetter = null;
-    } else {
+    if (gridx === 0) { cellLeftLetter = null; } 
+    else {
       cellLeft = $(`[data-gridx="${gridx - 1}"][data-gridy="${gridy}"] .cell`);
       cellLeftLetter = cellLeft.innerText;
     }
 
-    cell.classList.remove("green", "yellow", "orange");
+    cell.classList.remove("green", "yellow");
 
-    if (message == "burn" && goalWord.indexOf(cellLetter) !== -1) {
+    if (mod === 'burn' && goalWord.indexOf(cellLetter) !== -1) {
       cell.classList.add("orange");
-      say("burn");
     }
+    else if(mod === 'burn') cell.classList.add('burn');
+    else if(mod === 'hint' && !hintsGiven && cell.innerText === letter0) {
+      cell.classList.add('hint');
+      hintsGiven++;
+    }
+
     if (
       (cellLeftLetter === letter0 && cellLetter === letter1) ||
       (cellLeftLetter === letter1 && cellLetter === letter2) ||
@@ -220,9 +242,10 @@ function evaluate() {
     moves += moveBonus;
     movesItTook = 1;
     streak++;
+    let message;
 
     if (moves - burnCost > 0) $(".burn-btn").classList.remove("disabled");
-    if (moves - xupCost > 0) $(".xup-btn").classList.remove("disabled");
+    if (moves - hintCost > 0) $(".hint-btn").classList.remove("disabled");
     if (moves >= maxMoves) {
       moves = maxMoves;
       multiplier++;
@@ -245,6 +268,10 @@ function evaluate() {
   updateHUD();
 }
 
+function hush() {
+  $(".banner").classList.add("hidden");
+}
+
 function say(message) {
   $(".banner").classList.remove("hidden");
   let topText = "";
@@ -261,6 +288,9 @@ function say(message) {
   } else if (message === "burn") {
     topText = "B U R N ! ! ! 💀";
     bottomText = "🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥";
+  } else if (message === 'hint') {
+    topText = "Here's a hint... 🤐";
+    bottomText = `the first letter is * ${letter0} *`;
   }
   $(".banner-text-top").innerHTML = topText;
   $(".banner-text-bottom").innerHTML = bottomText;
@@ -274,28 +304,26 @@ function updateHUD() {
   $(".multiplier").innerText = multiplier;
 }
 
-function removeBurns() {
-  $$(".cell").forEach((cell) => cell.classList.remove("burn"));
+function removeTags() {
+  $$(".cell").forEach(cell => {
+    cell.classList.remove("burn");
+    cell.classList.remove("orange");
+    cell.classList.remove("hint");
+  });
 }
 
 function dealEm() {
   isVictory = false;
+  hintsGiven = 0;
   movesItTook = 1;
   roundScore = 500;
   setRandomGoalWord();
   setGoalCharIndexes();
   setGridLetters();
-  removeBurns();
+  removeTags();
   colorize();
 
   console.log(goalWord);
-  console.log(
-    goalChar0index,
-    goalChar1index,
-    goalChar2index,
-    goalChar3index,
-    goalChar4index
-  );
 }
 
 function gameOver() {
@@ -311,7 +339,6 @@ function gameOver() {
 }
 
 function startGame() {
-  setLocalData();
   $(".game-view").classList.remove("display-none");
   $(".menu-view").classList.add("display-none");
   setDifficulty(difficulty);

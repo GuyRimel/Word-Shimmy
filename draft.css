@@ -11,6 +11,7 @@
   --orange: hsl(25, 100%, 50%);
   --selected: hsl(350, 100%, 50%);
   --burn: hsl(0, 0%, 20%);
+  --hint: hsl(160, 100%, 50%);
   --e-dark: hsla(180, 90%, 15%, 1);
   --e-medium: hsla(180, 90%, 25%, 1);
   --e-light: hsla(180, 45%, 50%, 1);
@@ -22,7 +23,7 @@
   --h-light: hsla(220, 45%, 50%, 1);
   --skip-btn: hsla(15, 80%, 60%);
   --burn-btn: hsla(35, 80%, 60%);
-  --xup-btn: hsla(55, 80%, 60%);
+  --hint-btn: hsla(55, 80%, 60%);
   --guess-btn: hsla(75, 80%, 60%);
 }
 
@@ -194,8 +195,8 @@ h1 { color: #fff; }
   background: var(--burn-btn);
 }
 
-.xup-btn {
-  background: var(--xup-btn);
+.hint-btn {
+  background: var(--hint-btn);
 }
 
 .guess-btn {
@@ -208,11 +209,30 @@ h1 { color: #fff; }
 .display-none { display: none; }
 
 /* order matters!!! */  
-.burn { background: var(--burn) !important; border: 7px ridge var(--burn); color: #888}
-.orange { background: var(--orange) !important; border: 7px ridge var(--orange); color: #222; }
-.yellow { background: var(--yellow) !important; border: 7px ridge var(--yellow); color: #222; }
-.green { background: var(--green) !important; border: 7px ridge var(--green); color: #222;}
-.selected { border: 7px solid var(--selected); }
+.burn { background: var(--burn); border: 7px ridge var(--burn); color: #888}
+.orange { background: var(--orange); border: 7px ridge var(--orange); }
+.hint { background: var(--hint); border: 7px ridge var(--hint); }
+.yellow { background: var(--yellow); border: 7px ridge var(--yellow); }
+.green { background: var(--green); border: 7px ridge var(--green);}
+.orange.hint {
+  background-image: linear-gradient(
+  var(--orange), var(--hint)
+  );
+  border: 7px ridge var(--orange);
+}
+.yellow.hint {
+  background-image: linear-gradient(
+  var(--yellow), var(--hint)
+  );
+  border: 7px ridge var(--yellow);
+}
+.green.hint {
+  background-image: linear-gradient(
+  var(--green), var(--hint)
+  );
+  border: 7px ridge var(--green);
+}
+.selected { border: 7px solid var(--selected) !important; }
 
 .cyan-text { color: cyan }
 .yellow-text { color: #fcff82 }
