@@ -9,23 +9,23 @@
     <title>Word Shimmy</title>
   </head>
   <body class="normal-bg">
-    <section class="menu-view">
+    <section class="view menu-view">
       <div>
         <h1>Word Shimmy!</h1>
-        <h2 class="play-btn" onclick="startGame()">Play</h2>
+        <h2 class="menu-btn play-btn" onclick="startGame()">Play</h2>
         <div class="difficulty">
-          <h3 class="easy-btn" onclick="setDifficulty('easy')">Easy</h3>
-          <h3 class="normal-btn selected-btn" onclick="setDifficulty('normal')">
+          <h3 class="menu-btn easy-btn" onclick="setDifficulty('easy')">Easy</h3>
+          <h3 class="menu-btn normal-btn selected-btn" onclick="setDifficulty('normal')">
             Normal
           </h3>
-          <h3 class="hard-btn" onclick="setDifficulty('hard')">Hard</h3>
+          <h3 class="menu-btn hard-btn" onclick="setDifficulty('hard')">Hard</h3>
         </div>
-        <h2 onclick="viewHighScores()">High Scores</h2>
-        <h2 onclick="rules()">Rules</h2>
+        <h2 class="menu-btn" onclick="viewHighScores()">High Scores</h2>
+        <h2 class="menu-btn" onclick="rules()">Rules</h2>
       </div>
     </section>
 
-    <section class="game-view display-none">
+    <section class="view game-view display-none">
       <div class="very-top">
         <div class="current-difficulty"></div>
         <div>
@@ -39,8 +39,9 @@
       </div>
       <div class="hud">
         <h3>
-          <span class="round-score">500</span> <span>&nbsp;x</span
-          ><span class="multiplier">0</span>
+          <span class="round-score">500</span>
+          <span>&nbsp;x</span>
+          <span class="multiplier">0</span>
         </h3>
         <h2><span class="score">0</span></h2>
         <h3>MOV <span class="moves">10</span></h3>
@@ -56,7 +57,13 @@
       </div>
     </section>
 
-    <section class="hs-view display-none"></section>
+    <section class="view hs-view display-none">
+      <h1>High Scores</h1>
+      <h2><span>Easy&nbsp;</span><span class="hs-easy">0</span></h2>
+      <h2><span>Normal&nbsp;</span><span class="hs-normal">0</span></h2>
+      <h2><span>Hard&nbsp;</span><span class="hs-hard">0</span></h2>
+      <h3 class="menu-btn" onclick="quit()">Back</h3>
+    </section>
 
     <!-- bottom scripts -->
     <script src="config.js"></script>

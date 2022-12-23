@@ -330,7 +330,8 @@ function rules() {
 }
 
 function viewHighScores() {
-  alert("there are no high scores yet O_O !");
+  $$('.view').forEach(view => view.classList.add('display-none'));
+  $('.hs-view').classList.remove('display-none');
 }
 
 function updateHS(score) {
@@ -340,5 +341,8 @@ function updateHS(score) {
     wordShimmyData.highScores[difficulty] = score;
   }
   $('.current-high-score').innerText = wordShimmyData.highScores[difficulty];
+  $('.hs-easy').innerText = wordShimmyData.highScores.easy;
+  $('.hs-normal').innerText = wordShimmyData.highScores.normal;
+  $('.hs-hard').innerText = wordShimmyData.highScores.hard;
   localStorage.setItem("wordShimmyData", JSON.stringify(wordShimmyData));
 }

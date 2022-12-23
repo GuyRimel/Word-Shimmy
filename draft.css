@@ -44,34 +44,35 @@
 h1 { color: #fff; }
 
 .game-view,
-.menu-view {
+.menu-view,
+.hs-view {
   height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-.menu-view {
+.menu-view,
+.hs-view {
   justify-content: center;
   align-items: center;
 }
 
-.menu-view h2,
-.menu-view h3 {
+.menu-view *,
+.hs-view * {
+  margin-top: .75em;
+}
+
+.menu-btn {
   color: #fff;
   outline: 1px solid white;
   padding: .4em;
-  margin-top: .75em;
   box-shadow: 0 0.25em #000c;
   user-select: none;
 }
 
-.menu-view h2:hover,
-.menu-view h3:hover {
-  cursor: pointer;
-}
+.menu-btn:hover { cursor: pointer; }
 
-.menu-view h2:active,
-.menu-view h3:active {
+.menu-btn:active {
   background: white;
   color: #ccc;
   transform: translateY(.25em);
@@ -81,11 +82,12 @@ h1 { color: #fff; }
 .difficulty {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .difficulty * {
-  margin: 0;
   display: flex;
+  margin-top: 0.25em;
 }
 
 .selected-btn {
