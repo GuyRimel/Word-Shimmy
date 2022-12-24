@@ -21,7 +21,7 @@
           <h3 class="menu-btn hard-btn" onclick="setDifficulty('hard')">Hard</h3>
         </div>
         <h2 class="menu-btn" onclick="viewHighScores()">High Scores</h2>
-        <h2 class="menu-btn" onclick="rules()">Rules</h2>
+        <h2 class="menu-btn" onclick="viewRules()">Rules</h2>
       </div>
     </section>
 
@@ -33,8 +33,8 @@
           <span class="current-high-score">0</span>
         </div>
         <div>
-          <span onclick="quit()">Quit</span>
-          <span onclick="rules()">Rules</span>
+          <span onclick="viewMenu()">Quit</span>
+          <span onclick="viewRules()">Rules</span>
         </div>
       </div>
       <div class="hud">
@@ -62,7 +62,24 @@
       <h2><span>Easy&nbsp;</span><span class="hs-easy">0</span></h2>
       <h2><span>Normal&nbsp;</span><span class="hs-normal">0</span></h2>
       <h2><span>Hard&nbsp;</span><span class="hs-hard">0</span></h2>
-      <h3 class="menu-btn" onclick="quit()">Back</h3>
+      <h3 class="menu-btn w-50 text-center" onclick="viewMenu()">Back</h3>
+    </section>
+
+    <section class="view rules-view">
+      <div>
+        <button class="cell w-auto hint">R</button>
+        <button class="cell w-auto green">U</button>
+        <button class="cell w-auto yellow">L</button>
+        <button class="cell w-auto orange">E</button>
+        <button class="cell w-auto burn">S</button>
+      </div>
+      <div class="text-box">
+        <p>Shimmy letters to find the secret word.</p>
+        <p>Tap 2 letters to swap their positions.</p>
+        <p>If a letter tile is yellow, then it is part of the secret word and currently next to another letter in the secret word.</p>
+        <p></p>
+      </div>
+      <h3 class="menu-btn w-50 text-center" onclick="viewMenu()">Back</h3>
     </section>
 
     <!-- bottom scripts -->

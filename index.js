@@ -35,21 +35,19 @@
   $(".grid").appendChild(burnBtn);
   $(".grid").appendChild(hintBtn);
   $(".grid").appendChild(guessBtn);
-
   
-  (function setLocalData() {
-    if (!localStorage.getItem('wordShimmyData')) {
-      let wordShimmyData = JSON.stringify({
-        highScores: {
-          easy: 0,
-          normal: 0,
-          hard: 0
-        },
-      });
-      localStorage.setItem("wordShimmyData", wordShimmyData);
-    }
-  })();
-
+  // create an object in localStorage for storing highscores and other settings (if it doesn't already exist)
+  if (!localStorage.getItem('wordShimmyData')) {
+    let wordShimmyData = JSON.stringify({
+      highScores: {
+        easy: 0,
+        normal: 0,
+        hard: 0
+      },
+    });
+    localStorage.setItem("wordShimmyData", wordShimmyData);
+  }
+  setDifficulty(difficulty);
   updateHS();
 })();
 
@@ -268,7 +266,7 @@ function evaluate() {
   updateHUD();
 }
 
-function hush() {
+function hush() { // hide top banner text
   $(".banner").classList.add("hidden");
 }
 
@@ -339,21 +337,25 @@ function gameOver() {
 }
 
 function startGame() {
-  $(".game-view").classList.remove("display-none");
-  $(".menu-view").classList.add("display-none");
-  setDifficulty(difficulty);
+  viewGame();
   reset();
   dealEm();
   updateHUD();
 }
 
-function quit() {
-  $(".game-view").classList.add("display-none");
-  $(".menu-view").classList.remove("display-none");
+function viewMenu() {
+  $$('.view').forEach(view => view.classList.add('display-none'));
+  $('.menu-view').classList.remove('display-none');
 }
 
-function rules() {
-  alert("there are no rules yet O_O !");
+function viewRules() {
+  $$('.view').forEach(view => view.classList.add('display-none'));
+  $('.rules-view').classList.remove('display-none');
+}
+
+function viewGame() {
+  $$('.view').forEach(view => view.classList.add('display-none'));
+  $('.game-view').classList.remove('display-none');
 }
 
 function viewHighScores() {

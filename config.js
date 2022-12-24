@@ -23,7 +23,7 @@ let isVictory = false;
 let hintsGiven = 0;
 let burnCost = 5;
 let hintCost = 2;
-// each character of the goalWord gets a variable for it's grid index
+// each character of the goalWord gets a variable for it's grid index (grid location)
 let goalChar0index,
   goalChar1index,
   goalChar2index,
@@ -32,14 +32,14 @@ let goalChar0index,
 
 function setDifficulty(string) {
   if (string === "easy") {
-    moveBonus = 9;
+    moveBonus = 7;
     maxMoves = 20;
   } else if (string === "hard") {
-    moveBonus = 7;
+    moveBonus = 5;
     maxMoves = 10;
   } else {
     string = "normal";
-    moveBonus = 8;
+    moveBonus = 6;
     maxMoves = 15;
   }
   difficulty = string;
