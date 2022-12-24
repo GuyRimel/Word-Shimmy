@@ -65,19 +65,42 @@
       <h3 class="menu-btn w-50 text-center" onclick="viewMenu()">Back</h3>
     </section>
 
-    <section class="view rules-view">
+    <section class="view rules-view display-none">
       <div>
-        <button class="cell w-auto hint">R</button>
-        <button class="cell w-auto green">U</button>
-        <button class="cell w-auto yellow">L</button>
-        <button class="cell w-auto orange">E</button>
-        <button class="cell w-auto burn">S</button>
+        <button class="demo-cell w-auto hint">R</button>
+        <button class="demo-cell w-auto green">U</button>
+        <button class="demo-cell w-auto yellow">L</button>
+        <button class="demo-cell w-auto orange">E</button>
+        <button class="demo-cell w-auto burn">S</button>
       </div>
+      <p class="bottomline-gray">&nbsp;</p>
       <div class="text-box">
         <p>Shimmy letters to find the secret word.</p>
         <p>Tap 2 letters to swap their positions.</p>
-        <p>If a letter tile is yellow, then it is part of the secret word and currently next to another letter in the secret word.</p>
-        <p></p>
+        <p>Letters are evaluated horizontally.</p>
+        <br>
+        <span class="demo-cell green">T</span>
+        <span class="demo-cell green">H</span>
+        <span class="demo-cell green">I</span>
+        <span class="demo-cell green">N</span>
+        <span class="demo-cell green">K</span>
+        <p class="bottomline-gray">&nbsp;</p>
+        <p>When 2 letter tiles are green they are both in the secret word and next to eachother in the correct order.</p>
+        <br>
+        <span class="demo-cell">C</span>
+        <span class="demo-cell green">T</span>
+        <span class="demo-cell green">H</span>
+        <span class="demo-cell">Z</span>
+        <span class="demo-cell">X</span>
+        <p class="bottomline-gray">&nbsp;</p>
+        <p>When 2 letter tiles are yellow they are both in the secret word and next to eachother in the wrong order.</p>
+        <br>
+        <span class="demo-cell">E</span>
+        <span class="demo-cell yellow">K</span>
+        <span class="demo-cell yellow">H</span>
+        <span class="demo-cell">J</span>
+        <span class="demo-cell">Y</span>
+        <p class="bottomline-gray">&nbsp;</p>
       </div>
       <h3 class="menu-btn w-50 text-center" onclick="viewMenu()">Back</h3>
     </section>

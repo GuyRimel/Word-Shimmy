@@ -161,7 +161,8 @@ h1, h2, h3, h4, h5, h6, p { color: #fff; }
   justify-content: center;
 }
 
-.cell {
+.cell,
+.demo-cell {
   background: var(--cell-color);
   border: 7px ridge var(--cell-color);
   border-radius: 5px;
@@ -237,3 +238,7 @@ h1, h2, h3, h4, h5, h6, p { color: #fff; }
 .w-auto {width: auto;}
 .w-20 { width: 20%; }
 .w-50 { width: 50%; }
+.bottomline-gray {
+  width: 100%;
+  border-bottom: 1.1px solid #dbdbdb;
+}
