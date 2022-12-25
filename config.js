@@ -21,6 +21,7 @@ let streak = 0;
 let difficulty = null;
 let isVictory = false;
 let hintsGiven = 0;
+let guessesRemaining = 2;
 let burnCost = 5;
 let hintCost = 2;
 // each character of the goalWord gets a variable for it's grid index (grid location)
@@ -34,14 +35,18 @@ function setDifficulty(string) {
   if (string === "easy") {
     moveBonus = 7;
     maxMoves = 20;
+    guessesRemaining = 3;
   } else if (string === "hard") {
     moveBonus = 5;
     maxMoves = 10;
+    guessesRemaining = 1;
   } else {
     string = "normal";
     moveBonus = 6;
     maxMoves = 15;
+    guessesRemaining = 2;
   }
+  setGuesses();
   difficulty = string;
   string = string.charAt(0).toUpperCase() + string.slice(1);
   $(".current-difficulty").innerText = string;

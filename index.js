@@ -20,16 +20,17 @@
   let guessBtn = document.createElement("button");
 
   skipBtn.innerText = "Skip";
-  skipBtn.classList.add("btn", "skip-btn");
+  skipBtn.classList.add("game-btn", "skip-btn");
   skipBtn.addEventListener("click", skip);
   burnBtn.innerText = "Burn";
-  burnBtn.classList.add("btn", "burn-btn");
+  burnBtn.classList.add("game-btn", "burn-btn");
   burnBtn.addEventListener("click", burn);
   hintBtn.innerText = "Hint";
-  hintBtn.classList.add("btn", "hint-btn");
+  hintBtn.classList.add("game-btn", "hint-btn");
   hintBtn.addEventListener("click", hint);
-  guessBtn.innerText = "Guess";
-  guessBtn.classList.add("btn", "guess-btn");
+  // in the guess-btn is the "guess-marks" <span>
+  guessBtn.innerHTML = `Guess&nbsp;<span class="guess-marks"></span>`;
+  guessBtn.classList.add("game-btn", "guess-btn");
   guessBtn.addEventListener("click", guess);
   $(".grid").appendChild(skipBtn);
   $(".grid").appendChild(burnBtn);
@@ -74,12 +75,26 @@ function hint() {
   updateHUD();
 }
 
+function setGuesses() {
+  let guessMarksSpan = $('.guess-marks');
+  let marks = guessesRemaining;
+  guessMarksSpan.innerText = '';
+  for(i = 0; i < marks; i ++) {
+    guessMarksSpan.innerText += '|';
+  }
+}
+
 function guess() {
   guessWord = prompt("The word is...", "");
-  if (!guessWord) return;
-  else if (guessWord.toUpperCase() === goalWord) {
+  if (guessWord.toUpperCase() === goalWord) {
     isVictory = true;
+  }else{
+    guessesRemaining --;
+    if(guessesRemaining < 1) {
+      $(".guess-btn").classList.add("disabled");
+    }
   }
+  setGuesses();
   evaluate();
   clearSelections();
 }
@@ -87,6 +102,11 @@ function guess() {
 function clearSelections() {
   let selections = $$(".selected");
   selections.forEach((selection) => selection.classList.remove("selected"));
+}
+
+function enableGameBtns() {
+  let gameBtns = $$(".game-btn");
+    gameBtns.forEach((btn) => btn.classList.remove("disabled"));
 }
 
 function getRandomLetter() {
@@ -319,8 +339,9 @@ function dealEm() {
   setGoalCharIndexes();
   setGridLetters();
   removeTags();
+  enableGameBtns();
+  setGuesses();
   colorize();
-
   console.log(goalWord);
 }
 
