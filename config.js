@@ -13,11 +13,10 @@ let guessWord = "";
 let moves = 10;
 let movesItTook = 1;
 let moveBonus = 9;
-let maxMoves = 10;
+let maxMoves = 20;
 let score = 0;
 let roundScore = 500;
 let multiplier = 1;
-let multiplierMod = 0.2; // increment multiplier increases by
 let streak = 0;
 let difficulty = null;
 let isVictory = false;
@@ -34,7 +33,7 @@ let goalChar0index,
 
 function setDifficulty(string) {
   if (string === "easy") {
-    moveBonus = 9;
+    moveBonus = 7;
     maxMoves = 20;
     guessesRemaining = 3;
   } else if (string === "hard") {
@@ -44,7 +43,7 @@ function setDifficulty(string) {
   } else {
     string = "normal";
     moveBonus = 6;
-    maxMoves = 10;
+    maxMoves = 15;
     guessesRemaining = 2;
   }
   setGuesses();

@@ -57,7 +57,6 @@ function skip() {
   evaluate();
   dealEm();
   clearSelections();
-  updateHUD();
 }
 
 function burn() {
@@ -91,8 +90,11 @@ function guess() {
     isVictory = true;
   }else{
     guessesRemaining --;
+    if(guessesRemaining < 1) {
+      $(".guess-btn").classList.add("disabled");
+    }
   }
-  updateHUD();
+  setGuesses();
   evaluate();
   clearSelections();
 }
@@ -261,12 +263,10 @@ function evaluate() {
     let message;
 
     if (moves - burnCost > 0) $(".burn-btn").classList.remove("disabled");
-
     if (moves - hintCost > 0) $(".hint-btn").classList.remove("disabled");
-
     if (moves >= maxMoves) {
       moves = maxMoves;
-      multiplier += multiplierMod;
+      multiplier++;
       message = "multiplier up";
     } else {
       message = "victory";
@@ -316,14 +316,10 @@ function say(message) {
 
 function updateHUD() {
   updateHS();
-  setGuesses();
   $(".moves").innerText = moves;
   $(".score").innerText = score;
   $(".round-score").innerText = roundScore;
   $(".multiplier").innerText = multiplier;
-  if(moves - burnCost < 1) $('.burn-btn').classList.add('disabled');
-  if(moves - hintCost < 1) $('.hint-btn').classList.add('disabled');
-  if(guessesRemaining < 1) $(".guess-btn").classList.add("disabled");
 }
 
 function removeTags() {
